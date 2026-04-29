@@ -1,0 +1,89 @@
+name: daily-bulletin
+
+on:
+  schedule:
+    # 03:00 UTC fires at 06:00 local during DST (EEST, UTC+3, late March → late October).
+    # During winter (EET, UTC+2) it fires at 05:00 local — still before wake time, acceptable.
+    - cron: "0 3 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install system deps (ffmpeg)
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install Python deps
+        run: pip install -r requirements.txt
+
+      - name: Cache Piper voice model
+        id: cache-voice
+        uses: actions/cache@v4
+        with:
+          path: generator/voices
+          key: piper-voice-ro_RO-mihai-medium-v1
+
+      - name: Download Piper voice (if not cached)
+        if: steps.cache-voice.outputs.cache-hit != 'true'
+        run: bash scripts/download_voice.sh
+
+      - name: Seed public/ from live site (fallback for generator failures)
+        env:
+          PAGES_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: |
+          mkdir -p public public/archive
+          # If the generator fails today, the fallback keeps yesterday's bulletin live.
+          curl -sfL "$PAGES_URL/latest.mp3"  -o public/latest.mp3  || echo "no previous mp3 (first run?)"
+          curl -sfL "$PAGES_URL/latest.json" -o public/latest.json || echo "no previous json"
+          curl -sfL "$PAGES_URL/latest.txt"  -o public/latest.txt  || true
+
+      - name: Run generator
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+        run: python -m generator.main --sources sources.yaml --public-dir public
+
+      - name: Verify bulletin is present (allow fallback, fail if totally missing)
+        run: |
+          if [ ! -f public/latest.mp3 ] || [ ! -f public/latest.json ]; then
+            echo "::error::Neither today's nor yesterday's bulletin is available — aborting deploy to preserve Pages state."
+            exit 1
+          fi
+          ls -lh public/latest.mp3 public/latest.json
+
+      - name: Copy PWA static files into public/
+        run: |
+          cp -r pwa/* public/
+
+      - name: Upload artifact for Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
