@@ -27,6 +27,7 @@ REGULI STRICTE:
 """
 
 CATEGORY_HEADERS = {
+    "ai_news": "ȘTIRI DIN DOMENIUL INTELIGENȚEI ARTIFICIALE",
     "stiri_locale": "ȘTIRI LOCALE (MOȘNIȚA VECHĂ / TIMIȘOARA / CARAȘ-SEVERIN)",
     "stiri_internationale": "ȘTIRI INTERNAȚIONALE",
     "fotbal_romania": "FOTBAL ROMÂNIA (SUPERLIGA + LIGA II)",
@@ -34,6 +35,7 @@ CATEGORY_HEADERS = {
 }
 
 CATEGORY_ORDER = [
+    "ai_news",
     "stiri_locale",
     "stiri_internationale",
     "fotbal_romania",
@@ -217,8 +219,20 @@ class Section:
 
 SECTIONS: list[Section] = [
     Section(
+        key="ai_news",
+        intro_phrase="Începem cu știrile din domeniul inteligenței artificiale.",
+        target_words=200,
+        min_words=150,
+        guidance=(
+            "Prezintă cele mai importante știri despre inteligența artificială. "
+            "Pentru fiecare știre, dezvoltă cu context: ce companie, ce produs sau tehnologie, "
+            "ce impact, ce implicații. Dacă sunt menționate companii sau produse străine, "
+            "scrie-le fonetic pentru TTS românesc (ex: \"OpenAI\" → \"OpenAI\", \"Google\" → \"Google\")."
+        ),
+    ),
+    Section(
         key="meteo",
-        intro_phrase="Începem cu prognoza meteo pentru Moșnița Veche, Timișoara și Reșița.",
+        intro_phrase="Trecem la prognoza meteo pentru Moșnița Veche, Timișoara și Reșița.",
         target_words=200,
         min_words=150,
         guidance=(

@@ -1,40 +1,53 @@
 # RSS feed sources, grouped by bulletin section.
 # Comment out or remove entries if a feed dies; edit URLs as needed.
 
-stiri_locale:
-  - name: Tion (Timișoara)
-    url: https://www.tion.ro/feed/
-  - name: Caon (Caraș-Severin)
-    url: https://caon.ro/feed/
-  - name: Banatul Montan (Caraș-Severin)
-    url: https://banatulmontan.ro/feed/
-  # Moșnița Veche - no dedicated RSS feed, will use Timișoara sources
+categories:
+  ai_news:
+    - name: TechCrunch AI
+      url: https://techcrunch.com/category/artificial-intelligence/feed/
+    - name: VentureBeat AI
+      url: https://venturebeat.com/category/ai/feed/
+    - name: The Verge AI
+      url: https://www.theverge.com/ai-artificial-intelligence/rss/index.xml
 
-stiri_internationale:
-  - name: BBC World
-    url: https://feeds.bbci.co.uk/news/world/rss.xml
-  - name: Digi24 International
-    url: https://www.digi24.ro/rss
-  - name: HotNews
-    url: https://www.hotnews.ro/rss
-  - name: Reuters World
-    url: https://www.reuters.com/rssFeed/worldNews
+  meteo:
+    - name: Meteo (Moșnița Veche, Timișoara, Reșița)
+      url: https://weather-api-placeholder
 
-fotbal_romania:
-  - name: ProSport
-    url: https://www.prosport.ro/rss
-  - name: Digi Sport
-    url: https://www.digisport.ro/rss
-  - name: Gazeta Sporturilor
-    url: https://www.gsp.ro/rss
+  stiri_locale:
+    - name: Tion (Timișoara)
+      url: https://www.tion.ro/feed/
+    - name: Caon (Caraș-Severin)
+      url: https://caon.ro/feed/
+    - name: Banatul Montan (Caraș-Severin)
+      url: https://banatulmontan.ro/feed/
+    # Moșnița Veche - no dedicated RSS feed, will use Timișoara sources
 
-fotbal_international:
-  - name: BBC Sport Football
-    url: https://feeds.bbci.co.uk/sport/football/rss.xml
-  - name: ESPN Football
-    url: https://www.espn.com/espn/rss/soccer/news
-  - name: Goal.com
-    url: https://www.goal.com/rss/news
+  stiri_internationale:
+    - name: BBC World
+      url: https://feeds.bbci.co.uk/news/world/rss.xml
+    - name: Digi24 International
+      url: https://www.digi24.ro/rss
+    - name: HotNews
+      url: https://www.hotnews.ro/rss
+    - name: Reuters World
+      url: https://www.reuters.com/rssFeed/worldNews
+
+  fotbal_romania:
+    - name: ProSport
+      url: https://www.prosport.ro/rss
+    - name: Digi Sport
+      url: https://www.digisport.ro/rss
+    - name: Gazeta Sporturilor
+      url: https://www.gsp.ro/rss
+
+  fotbal_international:
+    - name: BBC Sport Football
+      url: https://feeds.bbci.co.uk/sport/football/rss.xml
+    - name: ESPN Football
+      url: https://www.espn.com/espn/rss/soccer/news
+    - name: Goal.com
+      url: https://www.goal.com/rss/news
 
 weather:
   cities:
