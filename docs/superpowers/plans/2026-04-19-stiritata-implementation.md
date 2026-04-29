@@ -174,7 +174,7 @@ python_functions = test_*
 - [ ] **Step 6: Create `.env.example`**
 
 ```
-OPENAI_API_KEY=sk-...
+OPENAI_API_KEY=your_openai_api_key_here
 OPENWEATHER_API_KEY=...
 ```
 

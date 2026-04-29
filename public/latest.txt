@@ -1,77 +1,75 @@
 Bună dimineața, Cristi. Astăzi este miercuri, 29 aprilie. Iată buletinul de știri.
 
-Începem cu știrile din domeniul inteligenței artificiale. Cobi Adcoc și compania sa Scout AI au strâns o sută de milioane de dolari pentru a antrena modele de inteligență artificială destinate războiului. Am vizitat tabăra de antrenament a Scout AI, unde se lucrează la agenți AI care permit soldaților să controleze flote de vehicule autonome.
+Începem cu știrile din domeniul inteligenței artificiale. Coby Adcock, fondatorul Scout AI, a reușit să strângă o sută de milioane de dolari pentru a-și antrena modelele destinate războiului. Scout AI dezvoltă agenți de inteligență artificială care permit soldaților să controleze flote de vehicule autonome. Această tehnologie ar putea schimba modul în care se desfășoară operațiunile militare, oferind un avantaj strategic pe câmpul de luptă.
 
-În altă ordine de idei, în cadrul procesului său cu OpenAI, Elon Musk a reluat o poveste despre o veche prietenie. Aceasta este o poveste pe care Musk a mai spus-o în interviuri și în biografia sa scrisă de Walter Isaacson, dar marți a fost prima dată când a făcut-o sub jurământ.
+În altă ordine de idei, Amazon a anunțat lansarea unor noi produse OpenAI pe platforma sa AWS. Aceasta vine la doar o zi după ce OpenAI a încheiat un acord cu Microsoft pentru a renunța la drepturile exclusive. Printre noile oferte se numără un serviciu de agenți, ceea ce ar putea accelera adoptarea inteligenței artificiale în diverse industrii.
 
-Amazon a început să ofere noi produse OpenAI pe platforma sa AWS. La doar o zi după ce OpenAI a obținut acordul Microsoft de a renunța la drepturile exclusive, AWS a anunțat o serie de oferte de modele OpenAI, inclusiv un nou serviciu de agenți.
+Totodată, Google a extins accesul Pentagonului la tehnologiile sale de inteligență artificială, după ce Anthropic a refuzat să permită utilizarea AI-ului său pentru supravegherea în masă și arme autonome. Acest nou contract cu Departamentul Apărării ar putea avea implicații semnificative pentru securitatea națională.
 
-De asemenea, Amazon a lansat o experiență audio de întrebări și răspunsuri bazată pe inteligență artificială pe paginile de produse. Noua funcție "Alătură-te conversației" permite utilizatorilor să pună întrebări despre produse și să primească răspunsuri audio generate de AI.
+Pe frontul aplicațiilor de consum, startup-ul Neurable intenționează să licențieze tehnologia sa de "citire a minții" pentru dispozitivele purtabile. Această tehnologie non-invazivă de colectare a datelor neuronale ar putea deschide noi oportunități în domeniul tehnologiei de consum.
 
-Google a extins accesul Pentagonului la tehnologiile sale de inteligență artificială după ce Anthropic a refuzat să permită Departamentului Apărării utilizarea AI-ului său pentru supravegherea în masă și arme autonome. Google a semnat un nou contract cu departamentul.
+În plus, YouTube testează o funcție de căutare bazată pe inteligență artificială, care oferă răspunsuri ghidate. Această funcție este disponibilă pentru abonații Premium din Statele Unite și ar putea îmbunătăți considerabil experiența utilizatorilor.
 
-Startup-ul Neurabl intenționează să licențieze tehnologia sa de "citire a minții" pentru dispozitivele purtabile de consum. Compania se specializează în tehnologia "non-invazivă" de colectare a datelor neuronale, pe care directorul său executiv speră să o aplice în diverse domenii de consum.
-
-În final, Otter a lansat o nouă funcție care permite utilizatorilor să caute în instrumentele lor de întreprindere. Utilizatorii pot conecta conturile lor de Gmail, Google Drive, Notion, Jira și Salesforce pentru a interoga aceste date alături de datele existente ale întâlnirilor. Compania a anunțat că în curând va permite conexiuni și cu Microsoft Outlook, Teams, SharePoint și Slack.
-
-Trecem la prognoza meteo pentru Moșnița Veche, Timișoara și Reșița. În Moșnița Veche, temperatura curentă este de șaisprezece virgulă unu grade Celsius, cu o minimă de cinci virgulă trei grade și o maximă de șaisprezece virgulă unu grade. Cerul este senin, iar vântul suflă cu șaptesprezece kilometri pe oră. Nu se așteaptă precipitații.
-
-La Timișoara, condițiile sunt similare. Temperatura actuală este de șaisprezece virgulă unu grade Celsius, cu o minimă de cinci virgulă patru grade și o maximă de șaisprezece virgulă unu grade. Cerul rămâne senin, iar vântul bate cu șaptesprezece kilometri pe oră. Precipitațiile lipsesc și aici.
-
-În Reșița, temperatura curentă este mai scăzută, la treisprezece virgulă opt grade Celsius. Minima zilei este de patru virgulă opt grade, iar maxima ajunge la treisprezece virgulă opt grade. Cerul este acoperit de nori, iar vântul are o viteză de șaisprezece kilometri pe oră. Nu se așteaptă precipitații.
-
-Având în vedere temperaturile scăzute din Reșița și vântul prezent în toate cele trei orașe, este recomandat să purtați haine mai groase.
-
-Trecem la știrile locale din Moșnița Veche, Timișoara și Caraș-Severin. În Timișoara, Parcul Rozelor va găzdui între optsprezece și douăzeci și unu iunie prima ediție a stagiunii „Rosarte”. Evenimentul cultural dedicat verii va aduce pe scenă legendara formație germană Alphaville, cunoscută pentru hiturile „Forever young” și „Big in Japan”. Timișorenii vor avea astfel ocazia să se bucure de muzica lor într-un cadru pitoresc.
-
-Tot în Timișoara, Consiliul Județean Timiș a aprobat o procedură prin care datoriile restante către bugetul județean pot fi plătite în rate. Măsura vine în sprijinul contribuabililor, care vor putea solicita eșalonarea plăților în baza unor condiții stabilite de administrația județeană.
-
-În altă ordine de idei, circulația feroviară dintre Timișoara și Arad va fi afectată la începutul lunii iunie. Din cauza lucrărilor de modernizare pe secțiunea Băile Calacea – Aradu Nou, mai multe trenuri InterRegio și Regio vor fi înlocuite parțial cu transport auto între Timișoara Nord și Arad.
-
-De asemenea, în Timișoara, polițiștii de la Investigarea Criminalității Economice Timiș au desfășurat o operațiune masivă, punând în aplicare șaptezeci și unu de mandate de percheziție. Acțiunile au avut loc în județele Timiș, Bistrița-Năsăud, Mehedinți, Gorj, Brașov și în București, vizând fraude cu fonduri.
-
-În Caraș-Severin, reșițenii sunt invitați să se bucure de redeschiderea spațiului de relaxare „La Șură. Loc splendid”, aflat la doar paisprezece kilometri de municipiu. Evenimentul coincide cu Ziua Muncii, pe întâi mai două mii douăzeci și șase, oferind o oportunitate de evadare din agitația urbană.
-
-Tot în Caraș-Severin, CSM Reșița trece printr-o perioadă dificilă atât sportiv, cât și financiar. După două înfrângeri consecutive, conducerea clubului a decis reducerea bugetului cu douăzeci și cinci la sută și mizează pe promovarea tinerelor talente pentru a depăși momentul critic.
-
-În altă ordine de idei, în județul Caraș-Severin, gradul de acoperire cu medici de familie este de doar șaptezeci virgulă zero cinci la sută. Conform Casei de Asigurări de Sănătate Caraș-Severin, în mediul urban activează optzeci din necesarul de nouăzeci și nouă de medici, iar în mediul rural situația este și mai precară.
-
-În Caransebeș, sportivii de la C.S. Energetica C.S.M. Caransebeș au obținut rezultate remarcabile la competiția Cupa „Judo Napoca”, desfășurată la Cluj-Napoca. Judoka din Caransebeș au urcat de mai multe ori pe podium, aducând acasă medalii de aur, argint și bronz.
-
-În final, în Timișoara, PSD și AUR, alături de alți parlamentari din opoziție, au depus o moțiune de cenzură împotriva Guvernului condus de Ilie Bolojan. Moțiunea va fi citită miercuri în plenul reunit al Camerei Deputaților și Senatului, iar votul este programat pentru săptămâna viitoare, în cinci mai.
-
-Pe plan internațional, principalele evenimente includ o moțiune de cenzură împotriva guvernului din România, care a fost citită în Parlament. Moțiunea, intitulată „STOP «Planului Bolojan» de distrugere a economiei, de sărăcire a populației și de vânzare frauduloasă a averii statului”, a fost depusă de grupurile parlamentare ale PSD, AUR și PACE – Întâi România. Aceasta a fost prezentată în plenul reunit al Parlamentului de liderul senatorilor AUR, Petrișor Peiu. Dezbaterea și votul sunt programate pentru cinci mai. La ședință nu au fost prezenți Ilie Bolojan și Sorin Grindeanu.
-
-În altă ordine de idei, serviciile de informații ucrainene au anunțat că Rusia intenționează să recruteze cel puțin optsprezece mii cinci sute de străini în forțele sale armate până în două mii douăzeci și șase. Această decizie vine ca urmare a pierderilor umane semnificative suferite de armata rusă în războiul din Ucraina. Recrutarea va include și migranți care locuiesc deja în Rusia.
-
-De asemenea, președintele american Donald Tramp a decis să prelungească blocada asupra Iranului. Această măsură vizează resursele financiare ale regimului de la Teheran, într-o încercare de a impune o capitulare în domeniul nuclear. Tramp este mulțumit că astfel subminează economia iraniană și împinge Teheranul la negocieri.
-
-În România, Dominic Fritz, liderul USR, a criticat textul moțiunii de cenzură depuse de PSD și AUR împotriva Guvernului Bolojan. Fritz susține că PSD „cu greu mai poate fi considerat un partid pro-european” dacă votează această moțiune. El a acuzat AUR că a copiat expresii din „manualele care circulă la Moscova”.
-
-Totodată, Franța a îndemnat cetățenii săi să părăsească Mali, după atacuri ale rebelilor. Regatul Unit a emis o recomandare similară, avertizându-i pe cetățeni că rămânerea în Mali se face pe propriul risc.
-
-În România, europarlamentarul AUR Gheorghe Piperea a discutat despre o aripă din PSD care nu a fost de acord cu doctrina progresistă. Printre susținătorii apropierii de AUR se numără Claudiu Manda și Lia Olguța Vasilescu.
-
-Ministerul Afacerilor Externe din România a emis o atenționare de călătorie pentru Grecia, unde este programată o grevă în sectorul maritim pe întâi mai. Toate navele, inclusiv feriboturile spre insule, vor rămâne în porturi pe parcursul zilei, conform Confederației Maritime Panelene.
-
-În România, sindicaliștii din educație au protestat în fața Ministerului Educației, nemulțumiți de „tăieri ilegale” ale salariilor. Ministrul Mihai Dimian a discutat cu profesorii, încercând să găsească soluții pentru revendicările acestora.
+În cele din urmă, Otter a lansat o nouă funcție care permite utilizatorilor să caute în cadrul instrumentelor lor de întreprindere. Utilizatorii pot conecta conturile lor de Gmail, Google Drive, Notion, Jira și Salesforce pentru a interoga datele, iar în curând vor putea adăuga și Microsoft Outlook, Teams, SharePoint și Slack.
 
 Din păcate, pentru această secțiune nu avem informații disponibile astăzi. Trecem mai departe.
 
-În fotbalul european, rezumăm etapa. În Ceampions Lig, Paris Sengermen a învins pe Baiărn Miunhen cu scorul de cinci la patru într-un meci spectaculos. Luis Enrique, antrenorul echipei pariziene, a descris această victorie ca fiind cea mai bună experiență din cariera sa de antrenor. În timpul meciului, Paris Sengermen a primit un penalty controversat, după o presupusă henț a unui jucător de la Baiărn Miunhen. Decizia a stârnit discuții aprinse despre corectitudinea arbitrajului. După meci, Luis Enrique și Vincent Kompany, antrenorul lui Baiărn Miunhen, au fost surprinși glumind despre partida intensă. Kompany, care a fost suspendat, a urmărit meciul din tribune, dar nu s-a bucurat de spectacol la fel ca ceilalți spectatori.
+Trecem la știrile locale din Moșnița Veche, Timișoara și Caraș-Severin. Parcul Rozelor din Timișoara va găzdui între optsprezece și douăzeci și unu iunie prima ediție a stagiunii „Rosarte”. Un eveniment cultural dedicat verii, unde timișorenii vor avea ocazia să asculte live legendara formație germană Alphaville. Cunoscuți pentru hituri precum „Forever young” și „Big in Japan”, membrii trupei promit un spectacol memorabil.
 
-În Premier Lig, Mencester Siti se confruntă cu un program încărcat, fiind nevoită să joace trei meciuri în șapte zile, în timp ce luptă pentru două trofee. Această situație a generat frustrare în rândul echipei, care încearcă să gestioneze oboseala jucătorilor.
+În altă ordine de idei, Consiliul Județean Timiș a aprobat o măsură care vine în sprijinul contribuabililor cu datorii. Restanțele către bugetul județean vor putea fi plătite eșalonat. Decizia a fost luată în ședința ordinară de astăzi și presupune respectarea unor condiții stabilite de administrația județeană.
 
-În La Liga, Jose Mourinho a refuzat să comenteze zvonurile care îl leagă de o posibilă revenire la Rial Madrid în sezonul următor. Aceste speculații au apărut în contextul în care echipa spaniolă caută să-și redefinească strategia pentru viitor.
+Tot în Timișoara, circulația feroviară către Arad va fi afectată la începutul lunii iunie. Din cauza lucrărilor de modernizare pe secțiunea Băile Calacea – Aradu Nou, mai multe trenuri InterRegio și Regio vor fi înlocuite parțial cu transport auto între Timișoara Nord și Arad.
 
-În Bundesliga, Baiărn Miunhen se concentrează pe recuperarea moralului după înfrângerea suferită în Ceampions Lig. Echipa germană își propune să își consolideze poziția în campionat și să își îmbunătățească jocul defensiv.
+În Reșița, administrația Piețelor redeschide „La Șură. Loc splendid”, un spațiu de relaxare situat la doar paisprezece kilometri de municipiu. Evenimentul coincide cu Ziua Muncii, pe întâi mai, oferind reșițenilor o oportunitate de a evada din agitația orașului și de a se bucura de natură.
 
-În Serie A, nu au fost raportate meciuri sau evenimente notabile în această etapă, dar echipele italiene continuă să se pregătească pentru finalul de sezon.
+De asemenea, în Caraș-Severin, sistemul de sănătate se confruntă cu un deficit de medici de familie. Conform Casei de Asigurări de Sănătate Caraș-Severin, gradul de acoperire este de doar șaptezeci virgulă zero cinci la sută. În mediul urban, activează optzeci din necesarul de nouăzeci și nouă de medici, iar în mediul rural, situația este și mai critică.
 
-În contextul Cupei Mondiale, FIFA a anunțat modificări la regulile de suspendare pentru cartonașe galbene, cu scopul de a reduce numărul de suspendări în rundele eliminatorii. De asemenea, jucătorii care își acoperă gura în timpul confruntărilor cu adversarii vor fi eliminați de pe teren. Totodată, echipa feminină de refugiate din Afganistan a primit eligibilitate pentru competițiile internaționale, la cinci ani după ce jucătoarele au fugit din țara lor din cauza regimului taliban.
+În altă ordine de idei, CSM Reșița trece printr-o perioadă dificilă. După două înfrângeri consecutive, conducerea clubului a decis să reducă bugetul cu douăzeci și cinci la sută și să se concentreze pe promovarea tinerelor talente. Președintele Cristi Bobar a făcut un apel către jucători pentru o reacție imediată.
 
-În altă ordine de idei, Los Angeles FC a propus vânzarea clubului elvețian Grasshopper, după ce suporterii au protestat vehement la un meci de acasă în Zurich. Clubul american încearcă să găsească o soluție pentru a calma nemulțumirile fanilor și a îmbunătăți performanțele echipei elvețiene.
+În Caransebeș, judoka de la C.S. Energetica C.S.M. Caransebeș au avut o prestație remarcabilă la Cupa „Judo Napoca” din Cluj-Napoca. Sportivii au obținut medalii de aur, argint și bronz, confirmând nivelul ridicat al competiției, care a reunit peste cinci sute șaptezeci de participanți din România și Republica Moldova.
 
-Înainte de a încheia, câteva momente din istoria zilei de astăzi. În anul una mie nouă sute nouăzeci și doi, au început revoltele din Los Angeles, după achitarea polițiștilor acuzați de folosirea excesivă a forței în cazul lui Rodney King. Timp de trei zile, șaizeci și trei de persoane au fost ucise și sute de clădiri au fost distruse. Tot pe această dată, în anul două mii cincisprezece, un meci de baseball între Baltimore Orioles și Chicago White Sox a stabilit un record de audiență minimă în Major League Baseball, cu zero spectatori. Stadionul a fost închis publicului din cauza protestelor din Baltimore. Iar în anul două mii treisprezece, o explozie puternică a avut loc într-o clădire de birouri din Praga, suspectată a fi cauzată de o scurgere de gaz natural, rănind patruzeci și trei de persoane.
+În Timișoara, o operațiune masivă a poliției a avut loc recent. Polițiștii de la Investigarea Criminalității Economice au efectuat șaptezeci și unu de percheziții în județele Timiș, Bistrița-Năsăud, Mehedinți, Gorj, Brașov și în București. Acțiunea vizează fraude cu fonduri, iar autoritățile promit să revină cu detalii suplimentare.
+
+În final, PSD și AUR, alături de alți parlamentari din opoziție, au depus o moțiune de cenzură împotriva Guvernului condus de Ilie Bolojan. Moțiunea va fi citită miercuri în plenul reunit al Camerei Deputaților și Senatului, iar votul este programat pentru săptămâna viitoare, pe cinci mai.
+
+Pe plan internațional, principalele evenimente includ o moțiune de cenzură în România, recrutări militare în Rusia și tensiuni în Iran. În România, moțiunea de cenzură împotriva Guvernului a fost citită în Parlament. Aceasta este intitulată „STOP «Planului Bolojan» de distrugere a economiei, de sărăcire a populaţiei şi de vânzare frauduloasă a averii statului”. Moțiunea a fost depusă de grupurile parlamentare ale PSD, AUR și PACE – Întâi România. Textul a fost citit de liderul senatorilor AUR, Petrișor Peiu. Dezbaterea și votul sunt programate pentru cinci mai. La ședință nu au fost prezenți Ilie Bolojan și Sorin Grindeanu.
+
+În altă ordine de idei, serviciile de informații ucrainene au anunțat că Rusia intenționează să recruteze cel puțin optsprezece mii cinci sute de străini în forțele sale armate până în două mii douăzeci și șase. Această măsură vine ca urmare a pierderilor umane semnificative suferite de armata rusă în războiul din Ucraina. Recrutările ar include și migranți care locuiesc deja în Rusia.
+
+Totodată, președintele american Donald Tramp a decis să prelungească blocada impusă Iranului. Această acțiune vizează resursele financiare ale regimului de la Teheran, într-o încercare de a forța o capitulare în domeniul nuclear. Tramp este mulțumit de efectele economice ale blocadei, care ar putea împinge Iranul la negocieri.
+
+În Europa, Franța a emis un avertisment pentru cetățenii săi, îndemnându-i să părăsească Mali după atacuri ale rebelilor. Marea Britanie a emis un avertisment similar, menționând că cetățenii care aleg să rămână o fac pe propriul risc.
+
+În România, Dominic Fritz, liderul USR, a criticat textul moțiunii de cenzură depuse de PSD și AUR. Fritz a declarat că PSD „cu greu mai poate fi considerat un partid pro-european” dacă votează moțiunea. El a acuzat AUR că a copiat expresii din „manualele care circulă la Moscova”.
+
+Europarlamentarul AUR Gheorghe Piperea a discutat despre o aripă din PSD care nu a fost de acord cu doctrina progresistă. Piperea a menționat nume precum Claudiu Manda și Lia Olguța Vasilescu, care ar susține o apropiere de AUR.
+
+În Grecia, Ministerul Afacerilor Externe a emis o atenționare de călătorie pentru românii care plănuiesc să meargă acolo în minivacanța de 1 mai. O grevă în sectorul maritim este programată pentru vineri, 1 mai, ceea ce va ține toate navele, inclusiv feriboturile spre insule, în porturi pe tot parcursul zilei.
+
+Trecem la fotbalul românesc. În SuperLiga României, FCSB se confruntă cu o situație tensionată privind poziția de antrenor principal. Gigi Becali este în căutare de soluții după plecarea lui Mirel Rădoi, care a părăsit echipa după doar cinci etape. Mihai Stoica a declarat că ar prefera un tehnician străin, însă Becali nu exclude varianta unui antrenor român. Printre numele vehiculate se numără și Ilie Poenaru, care a fost pe lista lui Becali în trecut. În prezent, discuțiile sunt în desfășurare, iar Becali a afirmat că decizia va fi luată rapid, fiind "o sută la sută" sigur de direcția în care dorește să meargă.
+
+Tot în SuperLigă, CFR Cluj a renunțat în iarnă la un jucător care acum face spectacol pe teren. Acesta a reușit să înscrie opt goluri în zece meciuri, demonstrând o formă de invidiat. Performanța sa ridică semne de întrebare privind decizia clubului de a-l lăsa să plece, mai ales în contextul în care CFR Cluj se luptă pentru titlu.
+
+În altă ordine de idei, în Liga a doua, echipele continuă să se lupte pentru promovare. Deși nu avem rezultate recente, competiția rămâne strânsă, iar fiecare punct câștigat poate face diferența în clasamentul final. Echipele sunt conștiente de miza ridicată și își pun toate resursele în joc pentru a-și asigura un loc în prima ligă.
+
+În ceea ce privește transferurile, situația de la FCSB este un subiect fierbinte, iar speculațiile continuă să apară. Cu toate acestea, până la finalizarea negocierilor, rămâne de văzut cine va prelua conducerea tehnică a echipei și cum va influența acest lucru performanțele viitoare.
+
+Pe plan internațional, deși nu este direct legat de fotbalul românesc, este de menționat că fostul fotbalist de la Dinamo, Lucian Goian, își vinde casa dintr-o zonă bună a Clujului. Locuința, care oferă intimitate și siguranță, este scoasă la vânzare pentru peste cinci sute de mii de euro.
+
+În fotbalul european, rezumăm etapa. În Ceampions Lig, Paris Sengermen a învins pe Baiărn Miunhen cu scorul de cinci la patru, într-un meci spectaculos. Antrenorul Luis Enrique a declarat că a fost cel mai bun meci din cariera sa de antrenor. Baiărn Miunhen a fost penalizată cu un penalty controversat pentru un henț, decizie care a stârnit discuții aprinse. Vincent Kompany, antrenorul Baiărn Miunhen, a fost suspendat și a urmărit meciul din tribune, fiind singurul care nu s-a bucurat de spectacolul oferit de echipele sale.
+
+În Premier Lig, Mencester Siti se confruntă cu un program aglomerat, fiind nevoită să joace trei meciuri în șapte zile, în timp ce luptă pentru două trofee. Această situație a generat frustrări în cadrul clubului, care se află într-o perioadă crucială a sezonului.
+
+În La Liga, Jose Mourinho a refuzat să comenteze zvonurile privind o posibilă revenire la Rial Madrid. Speculațiile continuă să circule, dar antrenorul portughez a ales să nu se pronunțe asupra acestui subiect.
+
+În altă ordine de idei, FIFA a anunțat modificări ale regulilor privind cartonașele galbene pentru Cupa Mondială din două mii douăzeci și șase. Scopul este de a reduce suspendările jucătorilor în rundele eliminatorii. De asemenea, jucătorii care își acoperă gura în timpul confruntărilor vor fi eliminați de pe teren la Cupa Mondială din această vară.
+
+O altă veste importantă vine din partea echipei feminine de fotbal a Afganistanului. Echipa a primit eligibilitate pentru competițiile internaționale, la cinci ani după ce jucătoarele au fugit din țară din cauza regimului taliban.
+
+Tot în această zonă, Los Angeles FC a oferit spre vânzare clubul elvețian Grasshopper, după protestele fanilor la un meci din Zurich. Situația clubului a generat nemulțumiri, iar conducerea a decis să ia măsuri.
+
+În final, un clasament al celor mai buni douăzeci de antrenori din fotbalul feminin a fost publicat, incluzând reprezentanți din NWSL, WSL și Liga F. Această evaluare reflectă performanțele și contribuțiile antrenorilor la dezvoltarea fotbalului feminin la nivel mondial.
+
+Din păcate, pentru această secțiune nu avem informații disponibile astăzi. Trecem mai departe.
 
 Acesta a fost buletinul de astăzi. O zi bună, Cristi!
