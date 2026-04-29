@@ -1,6 +1,14 @@
 # RSS feed sources, grouped by bulletin section.
 # Comment out or remove entries if a feed dies; edit URLs as needed.
 
+ai_news:
+  - name: TechCrunch AI
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+  - name: VentureBeat AI
+    url: https://venturebeat.com/category/ai/feed/
+  - name: The Verge AI
+    url: https://www.theverge.com/ai-artificial-intelligence/rss/index.xml
+
 stiri_locale:
   - name: Tion (Timișoara)
     url: https://www.tion.ro/feed/
