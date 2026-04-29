@@ -4,11 +4,12 @@ Aplicație zilnică de buletin de știri vocal în română.
 
 ## Categorii de știri
 
-1. **Meteo** - Moșnița Veche, Timișoara și Reșița (raport combinat)
-2. **Știri Locale** - Moșnița Veche, Timișoara, Caraș-Severin
-3. **Știri Internaționale**
-4. **Fotbal România** - Superliga și Liga a II-a
-5. **Fotbal Internațional** - Anglia, Italia, Germania, Spania + UCL, Europa League, Conference League, Cupa Mondială, Cupa Europeană
+1. **Știri AI** - TechCrunch AI, VentureBeat AI, The Verge AI
+2. **Meteo** - Moșnița Veche, Timișoara și Reșița (raport combinat)
+3. **Știri Locale** - Moșnița Veche, Timișoara, Caraș-Severin
+4. **Știri Internaționale**
+5. **Fotbal România** - Superliga și Liga a II-a
+6. **Fotbal Internațional** - Anglia, Italia, Germania, Spania + UCL, Europa League, Conference League, Cupa Mondială, Cupa Europeană
 
 ## Web PWA (instalabil pe telefon)
 
