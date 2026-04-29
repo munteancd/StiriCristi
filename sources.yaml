@@ -10,10 +10,6 @@ categories:
     - name: The Verge AI
       url: https://www.theverge.com/ai-artificial-intelligence/rss/index.xml
 
-  meteo:
-    - name: Meteo (Moșnița Veche, Timișoara, Reșița)
-      url: https://weather-api-placeholder
-
   stiri_locale:
     - name: Tion (Timișoara)
       url: https://www.tion.ro/feed/
