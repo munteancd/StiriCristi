@@ -18,6 +18,10 @@ public/archive/
 *.mp3
 !tests/fixtures/*.mp3
 
+# PWA files are now in root for GitHub Pages
+# Don't ignore them
+
+
 # Piper voice models (downloaded at runtime)
 generator/voices/
 

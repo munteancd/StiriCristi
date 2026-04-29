@@ -36,15 +36,11 @@ jobs:
         run: |
           python -m generator.main
           
-      - name: Copy audio to pwa directory
+      - name: Copy audio to public directory
         run: |
-          mkdir -p pwa/public
-          cp public/latest.mp3 pwa/public/
-          cp public/latest.json pwa/public/
-          
-      - name: Copy PWA files to root for GitHub Pages
-        run: |
-          cp -r pwa/* .
+          mkdir -p public
+          cp public/latest.mp3 public/
+          cp public/latest.json public/
           
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
