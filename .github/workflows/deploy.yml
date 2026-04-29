@@ -4,6 +4,10 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+  schedule:
+    # Run daily at 10:00 AM Romania time (UTC+2 in winter, UTC+3 in summer)
+    # Using UTC 8:00 AM (which is 10:00 AM Romania time in winter)
+    - cron: '0 8 * * *'
 
 permissions:
   contents: write
@@ -38,9 +42,13 @@ jobs:
           cp public/latest.mp3 pwa/public/
           cp public/latest.json pwa/public/
           
+      - name: Copy PWA files to root for GitHub Pages
+        run: |
+          cp -r pwa/* .
+          
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./pwa
+          publish_dir: .
           publish_branch: gh-pages
