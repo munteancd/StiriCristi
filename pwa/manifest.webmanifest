@@ -1,7 +1,7 @@
 {
-  "name": "Știri Tată",
+  "name": "Știri Cristi",
   "short_name": "Știri",
-  "description": "Buletin zilnic de știri vocal în română",
+  "description": "Buletin zilnic de știri vocal în română pentru Cristi",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

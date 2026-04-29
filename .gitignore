@@ -9,6 +9,7 @@ venv/
 # Environment
 .env
 GPT.txt
+API.txt
 
 # Build artifacts / audio
 public/latest.mp3

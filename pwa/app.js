@@ -21,7 +21,7 @@
 
   // --- position persistence (Feature 2) ---
 
-  const POSITION_KEY_PREFIX = "stiritata:position:";
+  const POSITION_KEY_PREFIX = "stiricristi:position:";
   const POSITION_SAVE_THROTTLE_MS = 10_000;
   const POSITION_MIN_SECONDS = 10; // below this, don't bother restoring
   const HINT_FADE_DELAY_MS = 5_000;
@@ -137,9 +137,9 @@
   function setupMediaSession(title, date) {
     if (!("mediaSession" in navigator)) return;
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: "Știri Tată",
+      title: "Știri Cristi",
       artist: `Buletin din ${formatDateRo(date)}`,
-      album: "Știri Tată",
+      album: "Știri Cristi",
       artwork: [
         { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
         { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" },
@@ -160,15 +160,15 @@
     statusEl.textContent = "";
     try {
       // Cache-bust manifest so we always see the latest even when the SW is cached.
-      const resp = await fetch(`latest.json?t=${Date.now()}`, { cache: "no-cache" });
+      const resp = await fetch(`public/latest.json?t=${Date.now()}`, { cache: "no-cache" });
       if (!resp.ok) throw new Error(`manifest http ${resp.status}`);
       const manifest = await resp.json();
 
       dateEl.textContent = `Buletin din ${formatDateRo(manifest.date)}`;
       currentBulletinDate = manifest.date;
       pruneOldPositionKeys(currentBulletinDate);
-      audio.src = `latest.mp3?v=${encodeURIComponent(manifest.date)}`;
-      setupMediaSession("Știri Tată", manifest.date);
+      audio.src = `public/latest.mp3?v=${encodeURIComponent(manifest.date)}`;
+      setupMediaSession("Știri Cristi", manifest.date);
       restorePositionOnce();
 
       if (Number.isFinite(manifest.duration_seconds)) {
@@ -177,7 +177,7 @@
     } catch (err) {
       // Offline / server down: fall back to whatever the SW has cached.
       statusEl.textContent = "Folosim buletinul salvat local.";
-      audio.src = "latest.mp3";
+      audio.src = "public/latest.mp3";
       dateEl.textContent = "Buletin din cache";
     }
   }
