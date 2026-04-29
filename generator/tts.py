@@ -10,15 +10,25 @@ log = logging.getLogger(__name__)
 @dataclass
 class PiperConfig:
     voice_id: str = "ro_RO-mihai-medium"
-    voice_dir: Path = field(default_factory=lambda: Path("D:/Resurse/piper"))
-    piper_binary: str = "D:/Resurse/piper/piper.exe"
-    ffmpeg_binary: str = "D:/Resurse/piper/ffmpeg.exe"
+    voice_dir: Path = field(default_factory=lambda: Path("generator/voices"))
+    piper_binary: str = "piper"
+    ffmpeg_binary: str = "ffmpeg"
 
 
 def _ffprobe_duration_seconds(mp3_path: Path) -> float:
-    # Skip duration check if ffprobe is not available
-    # Return a default duration based on word count approximation
-    return 0.0
+    result = subprocess.run(
+        [
+            "ffprobe",
+            "-v", "error",
+            "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1",
+            str(mp3_path),
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return float(result.stdout.strip())
 
 
 def synthesize(*, text: str, out_mp3: Path, config: PiperConfig) -> float:
