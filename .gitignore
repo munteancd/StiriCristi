@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Environment
+.env
+GPT.txt
+API.txt
+
+# Build artifacts / audio
+public/latest.mp3
+public/latest.json
+public/archive/
+*.mp3
+!tests/fixtures/*.mp3
+
+# PWA files are now in root for GitHub Pages
+# Don't ignore them
+
+
+# Piper voice models (downloaded at runtime)
+generator/voices/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Claude Code local settings
+.claude/
