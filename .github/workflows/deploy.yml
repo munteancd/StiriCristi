@@ -39,8 +39,12 @@ jobs:
       - name: Copy audio to public directory
         run: |
           mkdir -p public
-          cp public/latest.mp3 public/
-          cp public/latest.json public/
+          if [ -f "generator/public/latest.mp3" ]; then
+            cp generator/public/latest.mp3 public/
+          fi
+          if [ -f "generator/public/latest.json" ]; then
+            cp generator/public/latest.json public/
+          fi
           
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
