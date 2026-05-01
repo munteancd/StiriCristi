@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from generator.models import NewsItem, WeatherReport
+from generator.models import MultiCityWeather, NewsItem, WeatherReport
 from generator.main import run_pipeline
 
 
@@ -16,17 +16,21 @@ def _one_item() -> list[NewsItem]:
             summary="S.",
             url="u",
             source="X",
-            category="national_politics",
+            category="stiri_internationale",
             published=datetime(2026, 4, 19, 8, 0, tzinfo=timezone.utc),
         )
     ]
 
 
-def _wr() -> WeatherReport:
-    return WeatherReport(
-        city="Reșița",
-        temp_current_c=10, temp_min_c=5, temp_max_c=15,
-        description="nor", wind_kmh=5, precipitation_mm=0,
+def _wr() -> MultiCityWeather:
+    return MultiCityWeather(
+        reports=[
+            WeatherReport(
+                city="Reșița",
+                temp_current_c=10, temp_min_c=5, temp_max_c=15,
+                description="nor", wind_kmh=5, precipitation_mm=0,
+            )
+        ]
     )
 
 
@@ -35,8 +39,8 @@ async def test_pipeline_writes_mp3_and_manifest(tmp_path: Path):
     archive = public / "archive"
 
     sources_cfg = {
-        "national_politics": [{"name": "X", "url": "https://x.example/feed"}],
-        "weather": {"city": "Reșița", "country": "RO", "lat": 45.3, "lon": 21.88},
+        "stiri_internationale": [{"name": "X", "url": "https://x.example/feed"}],
+        "weather": {"cities": [{"name": "Reșița", "lat": 45.3, "lon": 21.88}]},
     }
 
     fake_openai = MagicMock()
@@ -89,8 +93,8 @@ async def test_pipeline_preserves_previous_mp3_on_summarize_failure(tmp_path: Pa
     }))
 
     sources_cfg = {
-        "national_politics": [{"name": "X", "url": "https://x.example/feed"}],
-        "weather": {"city": "Reșița", "country": "RO", "lat": 45.3, "lon": 21.88},
+        "stiri_internationale": [{"name": "X", "url": "https://x.example/feed"}],
+        "weather": {"cities": [{"name": "Reșița", "lat": 45.3, "lon": 21.88}]},
     }
 
     fake_openai = MagicMock()
@@ -122,8 +126,8 @@ async def test_pipeline_trims_archive_to_last_7_days(tmp_path: Path):
         (archive / f"2026-04-{d:02d}.mp3").write_bytes(b"x")
 
     sources_cfg = {
-        "national_politics": [{"name": "X", "url": "https://x.example/feed"}],
-        "weather": {"city": "Reșița", "country": "RO", "lat": 45.3, "lon": 21.88},
+        "stiri_internationale": [{"name": "X", "url": "https://x.example/feed"}],
+        "weather": {"cities": [{"name": "Reșița", "lat": 45.3, "lon": 21.88}]},
     }
 
     fake_openai = MagicMock()
@@ -149,7 +153,7 @@ async def test_pipeline_trims_archive_to_last_7_days(tmp_path: Path):
             now=datetime(2026, 4, 19, 6, 0, tzinfo=timezone.utc),
         )
 
-    archived_files = sorted(archive.glob("*.mp3"))
+    archived_files = sorted(archive.glob("*.mp3"), reverse=True)
     assert len(archived_files) <= 7
     assert (archive / "2026-04-19.mp3") in archived_files
 
@@ -161,8 +165,8 @@ async def test_pipeline_passes_history_to_summarize(tmp_path: Path):
     archive = public / "archive"
 
     sources_cfg = {
-        "national_politics": [{"name": "X", "url": "https://x.example/feed"}],
-        "weather": {"city": "Reșița", "country": "RO", "lat": 45.3, "lon": 21.88},
+        "stiri_internationale": [{"name": "X", "url": "https://x.example/feed"}],
+        "weather": {"cities": [{"name": "Reșița", "lat": 45.3, "lon": 21.88}]},
     }
 
     fake_openai = MagicMock()

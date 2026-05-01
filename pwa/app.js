@@ -120,6 +120,11 @@
   function setPlayIcon(isPlaying) {
     playIcon.textContent = isPlaying ? "⏸" : "▶";
     playBtn.setAttribute("aria-label", isPlaying ? "Pauză" : "Redare");
+    if (isPlaying) {
+      playBtn.classList.add("play-btn--playing");
+    } else {
+      playBtn.classList.remove("play-btn--playing");
+    }
   }
 
   async function acquireWakeLock() {

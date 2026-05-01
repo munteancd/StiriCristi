@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from generator.models import HistoryCandidates, HistoryItem, NewsItem, WeatherReport
+from generator.models import HistoryCandidates, HistoryItem, MultiCityWeather, NewsItem, WeatherReport
 from generator.prompt import (
     OUTRO,
     SECTIONS,
@@ -11,6 +11,7 @@ from generator.prompt import (
     build_intro,
     build_section_user_prompt,
     build_user_prompt,
+    CATEGORY_HEADERS,
 )
 from generator.summarize import _strip_trailing_wrap_up, summarize
 
@@ -22,7 +23,7 @@ def _sample_items() -> list[NewsItem]:
             summary="Rezumat.",
             url="https://a.ro/1",
             source="Digi24",
-            category="national_politics",
+            category="stiri_internationale",
             published=datetime(2026, 4, 19, 8, 0, tzinfo=timezone.utc),
         ),
         NewsItem(
@@ -30,21 +31,25 @@ def _sample_items() -> list[NewsItem]:
             summary="Derby bucureștean.",
             url="https://a.ro/2",
             source="GSP",
-            category="football_ro",
+            category="fotbal_romania",
             published=datetime(2026, 4, 19, 9, 0, tzinfo=timezone.utc),
         ),
     ]
 
 
-def _sample_weather() -> WeatherReport:
-    return WeatherReport(
-        city="Reșița",
-        temp_current_c=12.0,
-        temp_min_c=8.0,
-        temp_max_c=18.0,
-        description="cer senin",
-        wind_kmh=10.0,
-        precipitation_mm=0.0,
+def _sample_weather() -> MultiCityWeather:
+    return MultiCityWeather(
+        reports=[
+            WeatherReport(
+                city="Reșița",
+                temp_current_c=12.0,
+                temp_min_c=8.0,
+                temp_max_c=18.0,
+                description="cer senin",
+                wind_kmh=10.0,
+                precipitation_mm=0.0,
+            )
+        ]
     )
 
 
@@ -75,8 +80,8 @@ def test_user_prompt_groups_items_by_category_and_includes_weather():
         weather=_sample_weather(),
         bulletin_date=datetime(2026, 4, 19, 6, 0, tzinfo=timezone.utc),
     )
-    assert "POLITICĂ NAȚIONALĂ" in prompt
-    assert "FOTBAL ROMÂNIA" in prompt
+    assert CATEGORY_HEADERS["stiri_internationale"] in prompt
+    assert CATEGORY_HEADERS["fotbal_romania"] in prompt
     assert "Guvernul adoptă măsuri noi" in prompt
     assert "Rapid câștigă cu 2-1" in prompt
     assert "Reșița" in prompt
@@ -193,7 +198,7 @@ def test_strip_wrap_up_removes_acestea_au_fost():
         "În Ucraina, șeful poliției a demisionat.\n\n"
         "Acestea au fost principalele știri din fotbalul românesc."
     )
-    out = _strip_trailing_wrap_up(text, section_key="football_ro")
+    out = _strip_trailing_wrap_up(text, section_key="fotbal_romania")
     assert "Acestea au fost" not in out
     assert "demisionat" in out
 
@@ -203,7 +208,7 @@ def test_strip_wrap_up_removes_in_concluzie():
         "Bayern a câștigat cu patru la doi.\n\n"
         "În concluzie, săptămâna a fost plină de evenimente."
     )
-    out = _strip_trailing_wrap_up(text, section_key="football_eu")
+    out = _strip_trailing_wrap_up(text, section_key="fotbal_international")
     assert "În concluzie" not in out
 
 
@@ -223,7 +228,7 @@ def test_strip_wrap_up_removes_aceste_premii_subliniaza():
         "Frank Lampard a fost desemnat antrenorul sezonului. "
         "Aceste premii subliniază performanțele remarcabile ale celor doi."
     )
-    out = _strip_trailing_wrap_up(text, section_key="football_eu")
+    out = _strip_trailing_wrap_up(text, section_key="fotbal_international")
     assert "subliniază" not in out
     assert "Lampard" in out
 
@@ -234,7 +239,7 @@ def test_strip_wrap_up_removes_inline_in_concluzie():
         "Frank Lampard de la Coventry a fost desemnat antrenorul sezonului. "
         "În concluzie, fotbalul european ne-a oferit meciuri spectaculoase."
     )
-    out = _strip_trailing_wrap_up(text, section_key="football_eu")
+    out = _strip_trailing_wrap_up(text, section_key="fotbal_international")
     assert "În concluzie" not in out
     assert "Lampard" in out
 
@@ -245,7 +250,7 @@ def test_strip_wrap_up_leaves_real_news_alone():
         "CSM Reșița a pierdut meciul cu unu la doi.\n\n"
         "Antrenorul a declarat că echipa nu merita să piardă."
     )
-    out = _strip_trailing_wrap_up(text, section_key="local_politics")
+    out = _strip_trailing_wrap_up(text, section_key="stiri_locale")
     assert out == text
 
 
@@ -284,11 +289,11 @@ def test_summarize_retries_transient_failure_then_succeeds():
 
 
 def test_history_section_is_last_before_outro():
-    """The history section sits between football_eu and the outro."""
+    """The history section sits between fotbal_international and the outro."""
     keys = [s.key for s in SECTIONS]
     assert keys[-1] == "history"
-    assert "football_eu" in keys
-    assert keys.index("football_eu") == keys.index("history") - 1
+    assert "fotbal_international" in keys
+    assert keys.index("fotbal_international") == keys.index("history") - 1
 
 
 def test_build_section_user_prompt_for_history_includes_candidates():
@@ -311,7 +316,7 @@ def test_build_section_user_prompt_for_history_includes_candidates():
 
 def test_build_section_user_prompt_for_non_history_ignores_history_kwarg():
     """Passing history= to a non-history section is harmless."""
-    football_section = next(s for s in SECTIONS if s.key == "football_eu")
+    football_section = next(s for s in SECTIONS if s.key == "fotbal_international")
     prompt = build_section_user_prompt(
         section=football_section,
         items=_sample_items(),

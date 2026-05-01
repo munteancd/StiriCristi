@@ -19,7 +19,7 @@ Aplicația este disponibilă la: **https://munteancd.github.io/StiriCristi/**
 
 ### Generare automată
 
-Buletinul este generat automat zilnic la ora **10:00 AM** prin GitHub Actions.
+Buletinul este generat automat zilnic la ora **06:00 AM** (ora României) prin GitHub Actions.
 
 ### Instalare pe telefon
 

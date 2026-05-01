@@ -11,24 +11,28 @@ log = logging.getLogger(__name__)
 class PiperConfig:
     voice_id: str = "ro_RO-mihai-medium"
     voice_dir: Path = field(default_factory=lambda: Path("generator/voices"))
-    piper_binary: str = "piper"
-    ffmpeg_binary: str = "ffmpeg"
+    piper_binary: str = "piper"  # Assumes piper is in PATH or current dir
+    ffmpeg_binary: str = "ffmpeg" # Assumes ffmpeg is in PATH
 
 
-def _ffprobe_duration_seconds(mp3_path: Path) -> float:
-    result = subprocess.run(
-        [
-            "ffprobe",
-            "-v", "error",
-            "-show_entries", "format=duration",
-            "-of", "default=noprint_wrappers=1:nokey=1",
-            str(mp3_path),
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    return float(result.stdout.strip())
+def _ffprobe_duration_seconds(mp3_path: Path, ffmpeg_binary: str) -> float:
+    """Extract duration from MP3 using ffmpeg output parsing."""
+    try:
+        cmd = [ffmpeg_binary, "-i", str(mp3_path)]
+        # ffmpeg outputs info to stderr
+        proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+        output = proc.stderr
+        
+        # Look for "Duration: 00:01:42.50"
+        import re
+        match = re.search(r"Duration:\s+(\d+):(\d+):(\d+\.\d+)", output)
+        if match:
+            hours, minutes, seconds = match.groups()
+            return int(hours) * 3600 + int(minutes) * 60 + float(seconds)
+    except Exception as exc:
+        log.warning("failed to extract duration for %s: %s", mp3_path, exc)
+    
+    return 0.0
 
 
 def synthesize(*, text: str, out_mp3: Path, config: PiperConfig) -> float:
@@ -77,4 +81,4 @@ def synthesize(*, text: str, out_mp3: Path, config: PiperConfig) -> float:
                 f"ffmpeg failed (rc={ff.returncode}): {ff.stderr.decode(errors='replace')}"
             )
 
-    return _ffprobe_duration_seconds(out_mp3)
+    return _ffprobe_duration_seconds(out_mp3, config.ffmpeg_binary)

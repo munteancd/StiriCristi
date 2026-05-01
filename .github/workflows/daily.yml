@@ -1,6 +1,8 @@
 name: daily-bulletin
 
 on:
+  push:
+    branches: [master]
   schedule:
     # 03:00 UTC fires at 06:00 local during DST (EEST, UTC+3, late March → late October).
     # During winter (EET, UTC+2) it fires at 05:00 local — still before wake time, acceptable.
@@ -30,6 +32,13 @@ jobs:
 
       - name: Install system deps (ffmpeg)
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install Piper binary
+        run: |
+          curl -L https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_amd64.tar.gz -o piper.tar.gz
+          tar -xzf piper.tar.gz
+          # The tar contains a 'piper/' directory with the binary 'piper'
+          echo "$(pwd)/piper" >> $GITHUB_PATH
 
       - name: Install Python deps
         run: pip install -r requirements.txt

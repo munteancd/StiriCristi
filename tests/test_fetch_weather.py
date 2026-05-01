@@ -27,12 +27,12 @@ async def test_fetch_weather_calls_owm_and_returns_report():
     respx.get("https://api.openweathermap.org/data/3.0/onecall").mock(
         return_value=httpx.Response(200, content=FIXTURE.read_bytes())
     )
-    report = await fetch_weather(
+    weather = await fetch_weather(
         api_key="dummy",
-        lat=45.3,
-        lon=21.8833,
-        city="Reșița",
+        cities=[{"name": "Reșița", "lat": 45.3, "lon": 21.8833}],
     )
+    assert len(weather.reports) == 1
+    report = weather.reports[0]
     assert report.city == "Reșița"
     assert report.temp_max_c == 18.4
 
@@ -42,10 +42,8 @@ async def test_fetch_weather_returns_none_on_failure():
     respx.get("https://api.openweathermap.org/data/3.0/onecall").mock(
         return_value=httpx.Response(500)
     )
-    report = await fetch_weather(
+    weather = await fetch_weather(
         api_key="dummy",
-        lat=45.3,
-        lon=21.8833,
-        city="Reșița",
+        cities=[{"name": "Reșița", "lat": 45.3, "lon": 21.8833}],
     )
-    assert report is None
+    assert weather is None

@@ -24,12 +24,15 @@ def test_synthesize_invokes_piper_and_ffmpeg(tmp_path: Path):
 
     # Simulate Piper writing a WAV, then ffmpeg producing an MP3.
     def fake_run(cmd, **kwargs):
-        if "piper" in cmd[0].lower() or cmd[0].endswith("piper"):
+        is_piper = "piper" in Path(cmd[0]).name.lower()
+        is_ffmpeg = "ffmpeg" in Path(cmd[0]).name.lower()
+        
+        if is_piper:
             # Piper is told to write to `--output-raw` or `--output_file`; use output_file path
             # from the command to create a fake WAV.
             wav_path = Path(cmd[cmd.index("--output_file") + 1])
             wav_path.write_bytes(b"RIFF....WAVEfakeaudio")
-        elif "ffmpeg" in cmd[0]:
+        elif is_ffmpeg:
             out_index = cmd.index("-y") + 1 if "-y" in cmd else -1
             # Output is last arg
             Path(cmd[-1]).write_bytes(b"ID3fakemp3")
