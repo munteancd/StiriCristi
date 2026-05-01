@@ -137,12 +137,18 @@ async def run_pipeline(
             log.warning("failed to unlink %s: %s", old, exc)
 
     # 6. Write manifest
+    headlines = [it.title for it in items[:15]]
+    weather_summary = ""
+    if weather and weather.reports:
+        weather_summary = weather.reports[0].description
+
     manifest = build_manifest(
         date=now,
         duration_seconds=duration,
         audio_url="latest.mp3",
         generated_at=datetime.now(tz=timezone.utc),
-        chapters=_build_chapters(duration),
+        headlines=headlines,
+        weather_summary=weather_summary,
     )
     (public_dir / "latest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2),

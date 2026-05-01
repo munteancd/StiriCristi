@@ -16,34 +16,37 @@
   const seekBack = document.getElementById("seek-back");
   const seekFwd = document.getElementById("seek-fwd");
   const statusEl = document.getElementById("status");
-  const chaptersEl = document.getElementById("chapters");
+  const speedBtn = document.getElementById("speed-btn");
+  const headlinesList = document.getElementById("headlines-list");
+  const headlinesContainer = document.getElementById("headlines-container");
 
   let wakeLock = null;
 
-  // --- position persistence (Feature 2) ---
+  // --- playback speed ---
+  const speeds = [1, 1.25, 1.5, 2];
+  let speedIdx = 0;
+
+  speedBtn.addEventListener("click", () => {
+    speedIdx = (speedIdx + 1) % speeds.length;
+    const s = speeds[speedIdx];
+    audio.playbackRate = s;
+    speedBtn.textContent = `${s}×`;
+  });
+
+  // --- position persistence ---
 
   const POSITION_KEY_PREFIX = "stiricristi:position:";
   const POSITION_SAVE_THROTTLE_MS = 10_000;
-  const POSITION_MIN_SECONDS = 10; // below this, don't bother restoring
+  const POSITION_MIN_SECONDS = 10;
   const HINT_FADE_DELAY_MS = 5_000;
 
-  let currentBulletinDate = null; // ISO YYYY-MM-DD from manifest
+  let currentBulletinDate = null;
   let lastSavedAt = 0;
-  let chapters = [];
 
-  function positionKey(date) {
-    return POSITION_KEY_PREFIX + date;
-  }
-
-  function safeGet(key) {
-    try { return localStorage.getItem(key); } catch (_) { return null; }
-  }
-  function safeSet(key, value) {
-    try { localStorage.setItem(key, value); } catch (_) { /* quota/private mode */ }
-  }
-  function safeRemove(key) {
-    try { localStorage.removeItem(key); } catch (_) { /* ignore */ }
-  }
+  function positionKey(date) { return POSITION_KEY_PREFIX + date; }
+  function safeGet(key) { try { return localStorage.getItem(key); } catch (_) { return null; } }
+  function safeSet(key, value) { try { localStorage.setItem(key, value); } catch (_) { } }
+  function safeRemove(key) { try { localStorage.removeItem(key); } catch (_) { } }
 
   function savePosition() {
     if (!currentBulletinDate) return;
@@ -63,12 +66,10 @@
       const toDelete = [];
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
-        if (k && k.startsWith(POSITION_KEY_PREFIX) && k !== currentKey) {
-          toDelete.push(k);
-        }
+        if (k && k.startsWith(POSITION_KEY_PREFIX) && k !== currentKey) toDelete.push(k);
       }
       toDelete.forEach(safeRemove);
-    } catch (_) { /* ignore */ }
+    } catch (_) { }
   }
 
   function showResumeHint(seconds) {
@@ -77,7 +78,6 @@
     hintEl.textContent = `Continuă de la ${formatTime(seconds)}`;
     hintEl.hidden = false;
     hintEl.classList.remove("resume-hint--fading");
-    // Double rAF to let the browser paint the initial opacity:1 state before transitioning.
     requestAnimationFrame(() => requestAnimationFrame(() => {
       setTimeout(() => hintEl.classList.add("resume-hint--fading"), HINT_FADE_DELAY_MS);
     }));
@@ -92,8 +92,8 @@
 
     const applyWhenReady = () => {
       const dur = audio.duration;
-      if (!Number.isFinite(dur) || dur <= 0) return; // metadata still not ready
-      if (pos >= dur) return; // corrupted / desynced
+      if (!Number.isFinite(dur) || dur <= 0) return;
+      if (pos >= dur) return;
       audio.currentTime = pos;
       showResumeHint(pos);
     };
@@ -103,6 +103,32 @@
     } else {
       audio.addEventListener("loadedmetadata", applyWhenReady, { once: true });
     }
+  }
+
+  // --- theme based on weather ---
+  function applyWeatherTheme(summary) {
+    if (!summary) return;
+    const s = summary.toLowerCase();
+    let theme = "theme-default";
+    if (s.includes("senin") || s.includes("clear")) theme = "theme-clear";
+    else if (s.includes("nor") || s.includes("cloud")) theme = "theme-clouds";
+    else if (s.includes("ploaie") || s.includes("rain") || s.includes("drizzle")) theme = "theme-rain";
+    else if (s.includes("zăpadă") || s.includes("snow")) theme = "theme-snow";
+    else if (s.includes("furtună") || s.includes("thunderstorm")) theme = "theme-storm";
+    
+    document.body.className = theme;
+  }
+
+  // --- headlines ---
+  function renderHeadlines(headlines) {
+    if (!headlines || headlines.length === 0) {
+      headlinesContainer.hidden = true;
+      return;
+    }
+    headlinesContainer.hidden = false;
+    headlinesList.innerHTML = headlines
+      .map(h => `<li class="headline-item">${h}</li>`)
+      .join("");
   }
 
   function formatDateRo(isoDate) {
@@ -120,25 +146,17 @@
   function setPlayIcon(isPlaying) {
     playIcon.textContent = isPlaying ? "⏸" : "▶";
     playBtn.setAttribute("aria-label", isPlaying ? "Pauză" : "Redare");
-    if (isPlaying) {
-      playBtn.classList.add("play-btn--playing");
-    } else {
-      playBtn.classList.remove("play-btn--playing");
-    }
+    if (isPlaying) playBtn.classList.add("play-btn--playing");
+    else playBtn.classList.remove("play-btn--playing");
   }
 
   async function acquireWakeLock() {
     if (!("wakeLock" in navigator)) return;
-    try {
-      wakeLock = await navigator.wakeLock.request("screen");
-    } catch (_) { /* ignore */ }
+    try { wakeLock = await navigator.wakeLock.request("screen"); } catch (_) { }
   }
 
   function releaseWakeLock() {
-    if (wakeLock) {
-      wakeLock.release().catch(() => {});
-      wakeLock = null;
-    }
+    if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
   }
 
   function setupMediaSession(title, date) {
@@ -146,7 +164,6 @@
     navigator.mediaSession.metadata = new MediaMetadata({
       title: "Știri Cristi",
       artist: `Buletin din ${formatDateRo(date)}`,
-      album: "Știri Cristi",
       artwork: [
         { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
         { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" },
@@ -163,61 +180,9 @@
     audio.currentTime = target;
   }
 
-  function seekTo(seconds) {
-    if (!Number.isFinite(seconds) || seconds < 0) return;
-    const dur = audio.duration || seconds;
-    audio.currentTime = Math.max(0, Math.min(dur, seconds));
-  }
-
-  function renderChapters(rawChapters) {
-    chapters = Array.isArray(rawChapters)
-      ? rawChapters
-          .filter((chapter) => chapter && Number.isFinite(Number(chapter.start_seconds)))
-          .map((chapter) => ({
-            key: String(chapter.key || chapter.title || ""),
-            title: String(chapter.title || chapter.key || "Capitol"),
-            start: Number(chapter.start_seconds),
-          }))
-          .sort((a, b) => a.start - b.start)
-      : [];
-
-    if (!chaptersEl || chapters.length === 0) return;
-    chaptersEl.textContent = "";
-    chapters.forEach((chapter, index) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "chapter-btn";
-      btn.dataset.chapterIndex = String(index);
-      btn.setAttribute("aria-label", `Sari la ${chapter.title}, ${formatTime(chapter.start)}`);
-      btn.innerHTML = `${chapter.title}<span class="chapter-btn__time">${formatTime(chapter.start)}</span>`;
-      btn.addEventListener("click", () => seekTo(chapter.start));
-      chaptersEl.appendChild(btn);
-    });
-    chaptersEl.hidden = false;
-    updateActiveChapter();
-  }
-
-  function updateActiveChapter() {
-    if (!chaptersEl || chapters.length === 0) return;
-    const cur = audio.currentTime || 0;
-    let activeIndex = 0;
-    for (let i = 0; i < chapters.length; i++) {
-      if (chapters[i].start <= cur + 1) activeIndex = i;
-    }
-    chaptersEl.querySelectorAll(".chapter-btn").forEach((btn, index) => {
-      btn.classList.toggle("chapter-btn--active", index === activeIndex);
-      if (index === activeIndex) {
-        btn.setAttribute("aria-current", "true");
-      } else {
-        btn.removeAttribute("aria-current");
-      }
-    });
-  }
-
   async function loadManifestAndAudio() {
     statusEl.textContent = "";
     try {
-      // Cache-bust manifest so we always see the latest even when the SW is cached.
       const resp = await fetch(`public/latest.json?t=${Date.now()}`, { cache: "no-cache" });
       if (!resp.ok) throw new Error(`manifest http ${resp.status}`);
       const manifest = await resp.json();
@@ -228,29 +193,23 @@
       audio.src = `public/latest.mp3?v=${encodeURIComponent(manifest.date)}`;
       setupMediaSession("Știri Cristi", manifest.date);
       restorePositionOnce();
+      applyWeatherTheme(manifest.weather_summary);
+      renderHeadlines(manifest.headlines);
 
       if (Number.isFinite(manifest.duration_seconds)) {
         timeTotal.textContent = formatTime(manifest.duration_seconds);
       }
-      renderChapters(manifest.chapters);
     } catch (err) {
-      // Offline / server down: fall back to whatever the SW has cached.
       statusEl.textContent = "Folosim buletinul salvat local.";
       audio.src = "public/latest.mp3";
       dateEl.textContent = "Buletin din cache";
+      headlinesContainer.hidden = true;
     }
   }
 
-  // --- event wiring ---
-
   playBtn.addEventListener("click", async () => {
     if (audio.paused) {
-      try {
-        await audio.play();
-        await acquireWakeLock();
-      } catch (err) {
-        statusEl.textContent = "Nu pot reda audio. Verifică conexiunea.";
-      }
+      try { await audio.play(); await acquireWakeLock(); } catch (err) { }
     } else {
       audio.pause();
     }
@@ -260,32 +219,14 @@
   seekFwd.addEventListener("click", () => seek(30));
 
   audio.addEventListener("play", () => setPlayIcon(true));
-  audio.addEventListener("pause", () => {
-    setPlayIcon(false);
-    releaseWakeLock();
-    savePosition();
-  });
-  audio.addEventListener("ended", () => {
-    setPlayIcon(false);
-    releaseWakeLock();
-    clearPosition();
-  });
-
-  audio.addEventListener("loadedmetadata", () => {
-    if (Number.isFinite(audio.duration)) {
-      timeTotal.textContent = formatTime(audio.duration);
-    }
-  });
+  audio.addEventListener("pause", () => { setPlayIcon(false); releaseWakeLock(); savePosition(); });
+  audio.addEventListener("ended", () => { setPlayIcon(false); releaseWakeLock(); clearPosition(); });
 
   audio.addEventListener("timeupdate", () => {
     const cur = audio.currentTime || 0;
     const dur = audio.duration || 0;
     timeCurrent.textContent = formatTime(cur);
-    if (dur > 0) {
-      progressBar.style.width = `${(cur / dur) * 100}%`;
-    }
-    updateActiveChapter();
-    // Throttled save for crash recovery (battery dead, app killed, etc.)
+    if (dur > 0) progressBar.style.width = `${(cur / dur) * 100}%`;
     const now = Date.now();
     if (!audio.paused && now - lastSavedAt > POSITION_SAVE_THROTTLE_MS) {
       savePosition();
@@ -294,15 +235,10 @@
   });
 
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") {
-      savePosition();
-    }
-    if (document.visibilityState === "visible" && wakeLock === null && !audio.paused) {
-      acquireWakeLock();
-    }
+    if (document.visibilityState === "hidden") savePosition();
+    if (document.visibilityState === "visible" && wakeLock === null && !audio.paused) acquireWakeLock();
   });
 
-  // Register service worker
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("sw.js").catch(() => {});
