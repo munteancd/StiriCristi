@@ -3,7 +3,7 @@
 // - AUDIO (latest.mp3): stale-while-revalidate keyed by manifest date.
 // - MANIFEST (latest.json): network-first with cache fallback.
 
-const SHELL_CACHE = "stiricristi-shell-v2";
+const SHELL_CACHE = "stiricristi-shell-v3";
 const AUDIO_CACHE = "stiricristi-audio-v1";
 
 const SHELL_ASSETS = [
