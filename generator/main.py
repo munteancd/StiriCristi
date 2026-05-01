@@ -25,9 +25,6 @@ from .tts import PiperConfig, synthesize
 log = logging.getLogger(__name__)
 
 # Cap items per category to keep the ChatGPT prompt under the TPM limit
-# (gpt-4o tier-1 is 30K tokens/min). With ~100 tokens/item, 12 items/cat × 5 cats
-# ≈ 6K input tokens + 2K system prompt + 4K output budget ≈ 12K; well under 30K.
-# More items per category = more material for ChatGPT to expand the bulletin with.
 DEFAULT_MAX_ITEMS_PER_CATEGORY = 12
 
 CHAPTER_TITLES = {
@@ -50,22 +47,6 @@ def _cap_items_per_category(items: List[NewsItem], max_per_cat: int) -> List[New
         cat_items.sort(key=lambda x: x.published, reverse=True)
         capped.extend(cat_items[:max_per_cat])
     return capped
-
-
-def _build_chapters(duration_seconds: float) -> list[dict[str, Any]]:
-    if not math.isfinite(duration_seconds) or duration_seconds <= 0:
-        return []
-    total_weight = sum(max(1, section.target_words) for section in SECTIONS)
-    cursor = 0
-    chapters: list[dict[str, Any]] = []
-    for section in SECTIONS:
-        chapters.append({
-            "key": section.key,
-            "title": CHAPTER_TITLES.get(section.key, section.key.replace("_", " ").title()),
-            "start_seconds": round((cursor / total_weight) * duration_seconds, 1),
-        })
-        cursor += max(1, section.target_words)
-    return chapters
 
 
 async def run_pipeline(
@@ -114,13 +95,12 @@ async def run_pipeline(
         log.error("summarize failed, keeping previous bulletin: %s", exc)
         return
 
-    # 3. TTS → MP3 (optional - skip if piper not available)
+    # 3. TTS → MP3
     out_mp3 = public_dir / "latest.mp3"
     try:
         duration = synthesize(text=text, out_mp3=out_mp3, config=PiperConfig())
     except (FileNotFoundError, RuntimeError) as exc:
         log.warning("TTS failed, saving text only: %s", exc)
-        # Save text only if TTS fails
         (public_dir / "latest.txt").write_text(text, encoding="utf-8")
         return
 
@@ -128,7 +108,7 @@ async def run_pipeline(
     dated = archive_dir / f"{now.strftime('%Y-%m-%d')}.mp3"
     shutil.copy2(out_mp3, dated)
 
-    # 5. Trim archive to last 7 by mtime
+    # 5. Trim archive to last 7
     archives = sorted(archive_dir.glob("*.mp3"), key=lambda p: p.name, reverse=True)
     for old in archives[7:]:
         try:
@@ -150,12 +130,13 @@ async def run_pipeline(
         headlines=headlines,
         weather_summary=weather_summary,
     )
+    
     (public_dir / "latest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
 
-    # 7. Write the bulletin text too (useful for debugging)
+    # 7. Write the bulletin text
     (public_dir / "latest.txt").write_text(text, encoding="utf-8")
 
     log.info("pipeline complete: %s (%.1fs)", out_mp3, duration)
@@ -180,9 +161,9 @@ def main() -> None:
     openai_key = os.environ.get("OPENAI_API_KEY")
     openweather_key = os.environ.get("OPENWEATHER_API_KEY")
     if not openai_key:
-        raise SystemExit("OPENAI_API_KEY is not set (check .env or GitHub Secrets)")
+        raise SystemExit("OPENAI_API_KEY is not set")
     if not openweather_key:
-        raise SystemExit("OPENWEATHER_API_KEY is not set (check .env or GitHub Secrets)")
+        raise SystemExit("OPENWEATHER_API_KEY is not set")
 
     from openai import OpenAI
     client = OpenAI(api_key=openai_key)
