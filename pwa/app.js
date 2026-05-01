@@ -183,14 +183,14 @@
   async function loadManifestAndAudio() {
     statusEl.textContent = "";
     try {
-      const resp = await fetch(`public/latest.json?t=${Date.now()}`, { cache: "no-cache" });
+      const resp = await fetch(`latest.json?t=${Date.now()}`, { cache: "no-cache" });
       if (!resp.ok) throw new Error(`manifest http ${resp.status}`);
       const manifest = await resp.json();
 
       dateEl.textContent = `Buletin din ${formatDateRo(manifest.date)}`;
       currentBulletinDate = manifest.date;
       pruneOldPositionKeys(currentBulletinDate);
-      audio.src = `public/latest.mp3?v=${encodeURIComponent(manifest.date)}`;
+      audio.src = `latest.mp3?v=${encodeURIComponent(manifest.date)}`;
       setupMediaSession("Știri Cristi", manifest.date);
       restorePositionOnce();
       applyWeatherTheme(manifest.weather_summary);
