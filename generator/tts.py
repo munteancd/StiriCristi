@@ -1,4 +1,5 @@
 import asyncio
+import concurrent.futures
 import logging
 import subprocess
 import tempfile
@@ -142,8 +143,17 @@ async def _synthesize_edge_async(
 
 
 def synthesize_edge(*, text: str, out_mp3: Path, config: EdgeTTSConfig) -> float:
-    """Synchronous wrapper around the async edge-tts call."""
-    return asyncio.run(_synthesize_edge_async(text=text, out_mp3=out_mp3, config=config))
+    """Synchronous wrapper around the async edge-tts call.
+
+    Runs in a fresh thread so it never conflicts with an already-running
+    event loop (e.g. the one started by asyncio.run(run_pipeline(...))).
+    """
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(
+            asyncio.run,
+            _synthesize_edge_async(text=text, out_mp3=out_mp3, config=config),
+        )
+        return future.result()
 
 
 # ---------------------------------------------------------------------------
