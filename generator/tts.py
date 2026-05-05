@@ -211,7 +211,8 @@ def synthesize_voice(*, text: str, out_mp3: Path, voice: VoiceSpec) -> float:
         assert isinstance(voice.config, PiperConfig)
         return synthesize(text=romanize_for_tts(text), out_mp3=out_mp3, config=voice.config)
     elif voice.backend == "edge":
+        from .text_utils import romanize_for_edge_tts
         assert isinstance(voice.config, EdgeTTSConfig)
-        return synthesize_edge(text=text, out_mp3=out_mp3, config=voice.config)
+        return synthesize_edge(text=romanize_for_edge_tts(text), out_mp3=out_mp3, config=voice.config)
     else:
         raise ValueError(f"Unknown TTS backend: {voice.backend!r}")

@@ -152,9 +152,161 @@ def romanize_for_tts(text: str) -> str:
 
     Deterministic safety-net applied after LLM generation, for terms the
     model failed to transliterate per the system prompt instructions.
+    Used only for the Piper (offline) backend.
     """
     for pattern, phonetic in _PHONETICS:
         text = pattern.sub(phonetic, text)
+    return text
+
+
+# ---------------------------------------------------------------------------
+# Edge TTS pronunciation corrections.
+# Edge TTS (ro-RO-AlinaNeural / ro-RO-EmilNeural) handles English names well
+# but mispronounces names from Spanish, Portuguese, French, German, Dutch, etc.
+# These substitutions guide the neural voice using spelling that produces the
+# correct sound when read with Romanian phonetics rules.
+# Only non-English names need entries here.
+# ---------------------------------------------------------------------------
+_EDGE_CORRECTIONS_RAW: List[Tuple[str, str]] = [
+    # --- Spanish (j→h, x→h/s, ll→i, z→s, silent h) ---
+    ("José",            "Hose"),
+    ("Jose",            "Hose"),
+    ("Jesús",           "Hesus"),
+    ("Jesus",           "Hesus"),
+    ("Juan",            "Huan"),
+    ("Javier",          "Havyer"),
+    ("Jorge",           "Horhe"),
+    ("Juanmi",          "Huanmi"),
+    ("Xavi",            "Havi"),
+    ("Xabi",            "Habi"),
+    ("Xavier",          "Havier"),
+    ("Jiménez",         "Himenez"),
+    ("Jimenez",         "Himenez"),
+    ("Sánchez",         "Sancez"),
+    ("Sanchez",         "Sancez"),
+    ("González",        "Gonzalez"),
+    ("Rodríguez",       "Rodrighez"),
+    ("Rodriguez",       "Rodrighez"),
+    ("Hernández",       "Ernandez"),
+    ("Hernandez",       "Ernandez"),
+    ("Vázquez",         "Vaschez"),
+    ("Álvarez",         "Alvarez"),
+    ("Ramírez",         "Ramirez"),
+    ("Martínez",        "Martinez"),
+    ("Pérez",           "Perez"),
+    ("Muñoz",           "Munios"),
+    ("Moreno",          "Moreno"),
+    ("Guerrero",        "Gherero"),
+    ("Gutiérrez",       "Gutierrez"),
+    ("Joaquín",         "Hoakin"),
+    ("Joaquin",         "Hoakin"),
+    ("Atlético",        "Atletico"),
+
+    # --- Portuguese (lh→li, nh→ni, ão→aun, ou→o) ---
+    ("Mourinho",        "Murinio"),
+    ("Ronaldo",         "Ronaldo"),
+    ("Figueiredo",      "Figheiredo"),
+    ("Bernardo",        "Bernardo"),
+    ("João",            "Jhaun"),
+    ("Joao",            "Jhaun"),
+    ("Gonçalves",       "Gonsalvesh"),
+    ("Pereira",         "Pereira"),
+    ("Fonseca",         "Fonseka"),
+    ("Conceição",       "Consepsaun"),
+    ("Conceicao",       "Consepsaun"),
+    ("Nuno",            "Nuno"),
+    ("Benfica",         "Benfika"),
+    ("Sporting CP",     "Sporting"),
+
+    # --- French (silent endings, eu→ö, ou→u, eau→o) ---
+    ("Zidane",          "Zidan"),
+    ("Giroud",          "Jiру"),
+    ("Ribéry",          "Riberi"),
+    ("Ribery",          "Riberi"),
+    ("Lloris",          "Loris"),
+    ("Griezmann",       "Griezman"),
+    ("Pavard",          "Pavar"),
+    ("Dupont",          "Diupon"),
+    ("Deschamps",       "Deșan"),
+    ("Maignan",         "Menian"),
+    ("Camavinga",       "Camavinga"),
+    ("Tchouaméni",      "Ciuameni"),
+    ("Tchouameni",      "Ciuameni"),
+
+    # --- German (w→v, j→y, sch→ș, ch→h, ü→ü, ö→ö) ---
+    ("Müller",          "Muler"),
+    ("Neuer",           "Noier"),
+    ("Schweinsteiger",  "Șvainștaiger"),
+    ("Schick",          "Șik"),
+    ("Schürrle",        "Șirle"),
+    ("Götze",           "Ghетze"),
+    ("Kroos",           "Kros"),
+    ("Kimmich",         "Kimic"),
+    ("Havertz",         "Havertz"),
+    ("Wirtz",           "Virts"),
+    ("Werner",          "Verner"),
+    ("Brandt",          "Brandt"),
+    ("Gnabry",          "Gnabri"),
+
+    # --- Dutch (ij→ai, ui→oe, g→h guttural) ---
+    ("van Dijk",        "van Daik"),
+    ("de Ligt",         "de Licht"),
+    ("Depay",           "Depai"),
+    ("Wijnaldum",       "Vainoldum"),
+    ("Virgil",          "Virjil"),
+    ("Cody Gakpo",      "Codi Hakpo"),
+    ("Bergwijn",        "Berkhvain"),
+
+    # --- Italian (gli→li, gn→ni, ci→ci, sce→șe) ---
+    ("Donnarumma",      "Donaruma"),
+    ("Barella",         "Barela"),
+    ("Verratti",        "Verati"),
+    ("Chiellini",       "Kielini"),
+    ("Buffon",          "Bufon"),
+    ("Pirlo",           "Pirlo"),
+    ("Barzagli",        "Barzali"),
+
+    # --- Croatian / Balkan (š, č, ž, ć) ---
+    ("Brozović",        "Brozovici"),
+    ("Brozovic",        "Brozovici"),
+    ("Perišić",         "Perisici"),
+    ("Perisic",         "Perisici"),
+    ("Modrić",          "Modrici"),
+    ("Modric",          "Modrici"),
+    ("Kovačić",         "Kovacici"),
+    ("Kovacic",         "Kovacici"),
+    ("Džeko",           "Djeko"),
+    ("Dzeko",           "Djeko"),
+    ("Luka",            "Luka"),
+
+    # --- Arabic / African ---
+    ("Hakim Ziyech",    "Hakim Ziyeș"),
+    ("Achraf Hakimi",   "Aşraf Hakimi"),
+    ("Riyad Mahrez",    "Riyad Mahrez"),
+
+    # --- Korean / Japanese ---
+    ("Son Heung-min",   "Son Hung-min"),
+    ("Wataru Endo",     "Vataru Endo"),
+]
+
+_EDGE_CORRECTIONS: List[Tuple[re.Pattern, str]] = [
+    (re.compile(r"\b" + re.escape(orig) + r"\b", re.IGNORECASE), corr)
+    for orig, corr in sorted(
+        _EDGE_CORRECTIONS_RAW, key=lambda p: len(p[0]), reverse=True
+    )
+]
+
+
+def romanize_for_edge_tts(text: str) -> str:
+    """Pronunciation corrections for Edge TTS neural Romanian voices.
+
+    Edge TTS handles English names well but mispronounces names from
+    Spanish, Portuguese, French, German, Dutch, etc. This applies
+    spelling hints that produce the correct sound under Romanian
+    phonetics rules used by the neural voice.
+    """
+    for pattern, correction in _EDGE_CORRECTIONS:
+        text = pattern.sub(correction, text)
     return text
 
 

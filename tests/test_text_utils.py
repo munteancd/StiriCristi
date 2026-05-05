@@ -5,6 +5,7 @@ from generator.text_utils import (
     year_to_words_ro,
     normalize_title_for_dedup,
     romanize_for_tts,
+    romanize_for_edge_tts,
 )
 
 
@@ -98,3 +99,40 @@ def test_romanize_word_boundary_no_false_positive():
     # "Chelsey" is not "Chelsea" — should not be replaced.
     text = "Chelsey este un prenume."
     assert romanize_for_tts(text) == text
+
+
+# ---------------------------------------------------------------------------
+# romanize_for_edge_tts
+# ---------------------------------------------------------------------------
+
+def test_edge_spanish_sanchez():
+    assert romanize_for_edge_tts("Alexis Sanchez a marcat") == "Alexis Sancez a marcat"
+
+def test_edge_portuguese_mourinho():
+    assert romanize_for_edge_tts("Jose Mourinho a declarat") == "Hose Murinio a declarat"
+
+def test_edge_spanish_jose():
+    assert romanize_for_edge_tts("Jose Jimenez") == "Hose Himenez"
+
+def test_edge_german_muller():
+    assert romanize_for_edge_tts("Thomas Müller a marcat") == "Thomas Muler a marcat"
+
+def test_edge_dutch_van_dijk():
+    assert romanize_for_edge_tts("van Dijk a apărat") == "van Daik a apărat"
+
+def test_edge_croatian_modric():
+    assert romanize_for_edge_tts("Luka Modric a pasat") == "Luka Modrici a pasat"
+
+def test_edge_does_not_touch_english():
+    # English names should NOT be modified — Edge TTS handles them natively
+    text = "Marcus Rashford și Harry Kane au marcat."
+    assert romanize_for_edge_tts(text) == text
+
+def test_edge_does_not_touch_romanian():
+    text = "Bună dimineața, astăzi este luni."
+    assert romanize_for_edge_tts(text) == text
+
+def test_edge_longer_match_wins():
+    # "Jose" alone vs "Jose Jimenez" — the full name should match first
+    result = romanize_for_edge_tts("Jose Jimenez")
+    assert result == "Hose Himenez"
