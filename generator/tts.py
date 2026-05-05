@@ -199,10 +199,17 @@ VOICE_BY_ID: dict[str, VoiceSpec] = {v.id: v for v in AVAILABLE_VOICES}
 
 
 def synthesize_voice(*, text: str, out_mp3: Path, voice: VoiceSpec) -> float:
-    """Generate an MP3 for the given voice spec. Returns duration in seconds."""
+    """Generate an MP3 for the given voice spec. Returns duration in seconds.
+
+    Piper reads everything with raw Romanian phonetics, so we apply the
+    romanize_for_tts() substitution table before synthesis.
+    Edge TTS is a neural voice that handles foreign words natively, so it
+    receives the original text unchanged.
+    """
     if voice.backend == "piper":
+        from .text_utils import romanize_for_tts
         assert isinstance(voice.config, PiperConfig)
-        return synthesize(text=text, out_mp3=out_mp3, config=voice.config)
+        return synthesize(text=romanize_for_tts(text), out_mp3=out_mp3, config=voice.config)
     elif voice.backend == "edge":
         assert isinstance(voice.config, EdgeTTSConfig)
         return synthesize_edge(text=text, out_mp3=out_mp3, config=voice.config)

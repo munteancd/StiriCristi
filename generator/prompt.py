@@ -142,60 +142,12 @@ REGULI STRICTE:
 6. Nu scrie titluri de secțiuni, nu folosi markdown, nu lăsa paranteze explicative. \
    Doar proză curată, gata de citit la microfon.
 
-PRONUNȚIA NUMELOR STRĂINE (REGULĂ IMPORTANTĂ):
-Motorul TTS citește TOT textul cu fonetică românească. Dacă scrii \"Manchester City\", \
-îl va pronunța literă cu literă în română și va suna ridicol. De aceea, REscrie \
-ORICE cuvânt sau nume străin FONETIC în română, astfel încât sunetul rezultat \
-să imite pronunția reală. Aceasta este o regulă FĂRĂ EXCEPȚII.
-
-Exemple fotbal:
-- \"Manchester City\" → \"Mencester Siti\"
-- \"Manchester United\" → \"Mencester Iunaitid\"
-- \"Liverpool\" → \"Liverpul\"
-- \"Chelsea\" → \"Celsi\"
-- \"Arsenal\" → \"Arsnăl\"
-- \"Tottenham\" → \"Totnăm\"
-- \"Leicester\" → \"Lestăr\"
-- \"Newcastle\" → \"Niucasăl\"
-- \"Nottingham Forest\" → \"Notingăm Forest\"
-- \"Bayern München\" → \"Baiărn Miunhen\"
-- \"Borussia Dortmund\" → \"Borusia Dortmund\"
-- \"Real Madrid\" → \"Rial Madrid\"
-- \"Atlético Madrid\" → \"Atletico Madrid\"
-- \"Juventus\" → \"Iuventus\"
-- \"Paris Saint-Germain\" / \"PSG\" → \"Paris Sengermen\" (sau \"Pe-Se-Je\")
-- \"Champions League\" → \"Ceampions Lig\"
-- \"Europa League\" → \"Europa Lig\"
-- \"Conference League\" → \"Conferens Lig\"
-- \"Premier League\" → \"Premier Lig\"
-- Jucători: \"Haaland\" → \"Holand\"; \"Mbappé\" → \"Mbape\"; \"Foden\" → \"Fodăn\"; \
-  \"Bellingham\" → \"Belingăm\"; \"Rashford\" → \"Rașford\"; \"De Bruyne\" → \"De Bruin\"; \
-  \"Vinicius\" → \"Vinicitus\"; \"Saka\" → \"Saka\"; \"Salah\" → \"Salah\"
-
-Exemple politică/geopolitică:
-- \"Trump\" → \"Tramp\"; \"Biden\" → \"Baidăn\"; \"Macron\" → \"Macron\"
-- \"Netanyahu\" → \"Netaniahu\"; \"Zelensky\" → \"Zelenski\"
-- Orașe: \"London\" → \"Londra\"; \"New York\" → \"Niu Iork\"; \
-  \"Washington\" → \"Uașington\"; \"Moscow\" → \"Moscova\"
-- Păstrează varianta românească dacă există (\"Paris\", \"Roma\", \"Viena\", \"Berlin\")
-
-Exemple tehnologie / inteligență artificială:
-- \"ChatGPT\" → \"Cet-Ji-Pi-Ti\"
-- \"OpenAI\" → \"Open-AI\"
-- \"DeepSeek\" → \"Dip-Sik\"
-- \"Gemini\" → \"Jemini\"
-- \"Copilot\" → \"Copailot\"
-- \"GitHub\" → \"Ghit-Hab\"
-- \"LinkedIn\" → \"Linkt-In\"
-- \"Google\" → \"Google\" (citit corect în română)
-- \"Microsoft\" → \"Maicrosoft\"
-- \"Apple\" → \"Apăl\"
-- \"Meta\" → \"Meta\" (citit corect în română)
-- Acronime: \"CEO\" → \"Si-Io-Ou\"; \"GPU\" → \"Ji-Pi-Iu\"; \
-  \"API\" → \"A-Pi-Ai\"; \"AI\" → \"A-I\"
-
-Dacă ești în dubiu cu un nume, alege varianta care se citește cel mai aproape \
-de pronunția reală când e spusă cu fonetică românească.
+NUME STRĂINE:
+Scrie numele străine (echipe, jucători, politicieni, orașe, companii tech) \
+în forma lor originală, corectă. Folosește varianta românească dacă există \
+(\"Londra\", \"Moscova\", \"Viena\") — altfel păstrează grafia originală \
+(\"Manchester City\", \"ChatGPT\", \"Washington\"). \
+Nu transliterera fonetic — motorul TTS se ocupă de pronunție.
 
 STIL — FĂRĂ CONCLUZII, REZUMATE SAU WRAP-UP (REGULĂ CATEGORICĂ):
 Ultima propoziție a secțiunii TREBUIE să fie despre ULTIMA știre concretă, \
