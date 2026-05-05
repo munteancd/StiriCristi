@@ -145,11 +145,12 @@ REGULI STRICTE:
 PRONUNȚIA NUMELOR STRĂINE (REGULĂ IMPORTANTĂ):
 Motorul TTS citește TOT textul cu fonetică românească. Dacă scrii \"Manchester City\", \
 îl va pronunța literă cu literă în română și va suna ridicol. De aceea, REscrie \
-numele străine (echipe de fotbal, jucători, politicieni străini, orașe străine) \
-FONETIC în română, astfel încât sunetul rezultat să imite pronunția reală.
+ORICE cuvânt sau nume străin FONETIC în română, astfel încât sunetul rezultat \
+să imite pronunția reală. Aceasta este o regulă FĂRĂ EXCEPȚII.
 
-Exemple concrete:
-- \"Manchester City\" → scrie \"Mencester Siti\"
+Exemple fotbal:
+- \"Manchester City\" → \"Mencester Siti\"
+- \"Manchester United\" → \"Mencester Iunaitid\"
 - \"Liverpool\" → \"Liverpul\"
 - \"Chelsea\" → \"Celsi\"
 - \"Arsenal\" → \"Arsnăl\"
@@ -165,14 +166,33 @@ Exemple concrete:
 - \"Paris Saint-Germain\" / \"PSG\" → \"Paris Sengermen\" (sau \"Pe-Se-Je\")
 - \"Champions League\" → \"Ceampions Lig\"
 - \"Europa League\" → \"Europa Lig\"
+- \"Conference League\" → \"Conferens Lig\"
 - \"Premier League\" → \"Premier Lig\"
 - Jucători: \"Haaland\" → \"Holand\"; \"Mbappé\" → \"Mbape\"; \"Foden\" → \"Fodăn\"; \
-  \"Saka\" → \"Saka\"; \"Salah\" → \"Salah\"; \"Rodrygo\" → \"Rodrigo\"
-- Politicieni/lideri străini: \"Trump\" → \"Tramp\"; \"Biden\" → \"Baidăn\"; \
-  \"Macron\" → \"Macron\"; \"Netanyahu\" → \"Netaniahu\"; \"Zelensky\" → \"Zelenski\"
-- Orașe străine comune: păstrează varianta românească dacă există \
-  (\"Londra\", \"Paris\", \"Roma\", \"Viena\"); altfel transliterează fonetic \
-  (\"New York\" → \"Niu Iork\"; \"Washington\" → \"Uașington\")
+  \"Bellingham\" → \"Belingăm\"; \"Rashford\" → \"Rașford\"; \"De Bruyne\" → \"De Bruin\"; \
+  \"Vinicius\" → \"Vinicitus\"; \"Saka\" → \"Saka\"; \"Salah\" → \"Salah\"
+
+Exemple politică/geopolitică:
+- \"Trump\" → \"Tramp\"; \"Biden\" → \"Baidăn\"; \"Macron\" → \"Macron\"
+- \"Netanyahu\" → \"Netaniahu\"; \"Zelensky\" → \"Zelenski\"
+- Orașe: \"London\" → \"Londra\"; \"New York\" → \"Niu Iork\"; \
+  \"Washington\" → \"Uașington\"; \"Moscow\" → \"Moscova\"
+- Păstrează varianta românească dacă există (\"Paris\", \"Roma\", \"Viena\", \"Berlin\")
+
+Exemple tehnologie / inteligență artificială:
+- \"ChatGPT\" → \"Cet-Ji-Pi-Ti\"
+- \"OpenAI\" → \"Open-AI\"
+- \"DeepSeek\" → \"Dip-Sik\"
+- \"Gemini\" → \"Jemini\"
+- \"Copilot\" → \"Copailot\"
+- \"GitHub\" → \"Ghit-Hab\"
+- \"LinkedIn\" → \"Linkt-In\"
+- \"Google\" → \"Google\" (citit corect în română)
+- \"Microsoft\" → \"Maicrosoft\"
+- \"Apple\" → \"Apăl\"
+- \"Meta\" → \"Meta\" (citit corect în română)
+- Acronime: \"CEO\" → \"Si-Io-Ou\"; \"GPU\" → \"Ji-Pi-Iu\"; \
+  \"API\" → \"A-Pi-Ai\"; \"AI\" → \"A-I\"
 
 Dacă ești în dubiu cu un nume, alege varianta care se citește cel mai aproape \
 de pronunția reală când e spusă cu fonetică românească.

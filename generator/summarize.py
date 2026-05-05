@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Any, List, Optional
 
 from .models import HistoryCandidates, NewsItem, WeatherReport, MultiCityWeather
+from .text_utils import romanize_for_tts
 from .prompt import (
     OUTRO,
     SECTIONS,
@@ -208,6 +209,9 @@ def summarize(
         )
 
     parts.append(OUTRO)
+
+    # Safety-net: replace any foreign words the LLM forgot to transliterate.
+    parts = [romanize_for_tts(p) for p in parts]
 
     total_words = sum(len(p.split()) for p in parts)
     log.info(
