@@ -20,7 +20,7 @@ from .fetch_history import fetch_history
 from .models import NewsItem
 from .prompt import SECTIONS
 from .summarize import summarize
-from .tts import PiperConfig, synthesize
+from .tts import VOICE_BY_ID, VoiceSpec, synthesize_voice
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +49,20 @@ def _cap_items_per_category(items: List[NewsItem], max_per_cat: int) -> List[New
     return capped
 
 
+def _resolve_voices(voice_ids: list[str]) -> list[VoiceSpec]:
+    """Convert a list of voice ID strings to VoiceSpec objects."""
+    voices = []
+    for vid in voice_ids:
+        if vid not in VOICE_BY_ID:
+            log.warning("unknown voice id %r, skipping (available: %s)", vid, list(VOICE_BY_ID))
+            continue
+        voices.append(VOICE_BY_ID[vid])
+    if not voices:
+        log.warning("no valid voices configured; falling back to 'mihai'")
+        voices = [VOICE_BY_ID["mihai"]]
+    return voices
+
+
 async def run_pipeline(
     *,
     sources_cfg: Dict[str, Any],
@@ -58,10 +72,13 @@ async def run_pipeline(
     openweather_api_key: str,
     now: datetime | None = None,
     max_items_per_category: int = DEFAULT_MAX_ITEMS_PER_CATEGORY,
+    voice_ids: list[str] | None = None,
 ) -> None:
     now = now or datetime.now(tz=timezone.utc)
     public_dir.mkdir(parents=True, exist_ok=True)
     archive_dir.mkdir(parents=True, exist_ok=True)
+
+    voices = _resolve_voices(voice_ids or ["mihai"])
 
     rss_cfg = {k: v for k, v in sources_cfg.items() if k != "weather"}
     weather_cfg = sources_cfg.get("weather", {})
@@ -95,16 +112,35 @@ async def run_pipeline(
         log.error("summarize failed, keeping previous bulletin: %s", exc)
         return
 
-    # 3. TTS → MP3
+    # 3. TTS → MP3 (one file per configured voice)
+    default_voice = voices[0]
     out_mp3 = public_dir / "latest.mp3"
-    try:
-        duration = synthesize(text=text, out_mp3=out_mp3, config=PiperConfig())
-    except (FileNotFoundError, RuntimeError) as exc:
-        log.warning("TTS failed, saving text only: %s", exc)
+    duration = 0.0
+    generated_voice_infos: list[dict] = []
+
+    for voice in voices:
+        voice_mp3 = public_dir / f"latest-{voice.id}.mp3"
+        try:
+            dur = synthesize_voice(text=text, out_mp3=voice_mp3, voice=voice)
+            log.info("TTS OK: %s → %s (%.1fs)", voice.id, voice_mp3, dur)
+            generated_voice_infos.append({
+                "id": voice.id,
+                "label": voice.label,
+                "gender": voice.gender,
+                "url": f"latest-{voice.id}.mp3",
+            })
+            if voice.id == default_voice.id:
+                shutil.copy2(voice_mp3, out_mp3)
+                duration = dur
+        except (FileNotFoundError, RuntimeError, Exception) as exc:
+            log.warning("TTS failed for voice %r: %s", voice.id, exc)
+
+    if not generated_voice_infos:
+        log.warning("All TTS voices failed, saving text only")
         (public_dir / "latest.txt").write_text(text, encoding="utf-8")
         return
 
-    # 4. Archive a dated copy
+    # 4. Archive a dated copy of the default voice
     dated = archive_dir / f"{now.strftime('%Y-%m-%d')}.mp3"
     shutil.copy2(out_mp3, dated)
 
@@ -129,6 +165,7 @@ async def run_pipeline(
         generated_at=datetime.now(tz=timezone.utc),
         headlines=headlines,
         weather_summary=weather_summary,
+        voices=generated_voice_infos if len(generated_voice_infos) > 1 else None,
     )
     
     (public_dir / "latest.json").write_text(
@@ -152,6 +189,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate daily Știri Tată bulletin")
     parser.add_argument("--sources", default="sources.yaml")
     parser.add_argument("--public-dir", default="public")
+    parser.add_argument(
+        "--voices",
+        default=None,
+        help="Comma-separated voice IDs to generate (e.g. mihai,alina). "
+             "Overrides TTS_VOICES env var. Default: mihai.",
+    )
     args = parser.parse_args()
 
     sources_cfg = yaml.safe_load(Path(args.sources).read_text(encoding="utf-8"))
@@ -165,6 +208,10 @@ def main() -> None:
     if not openweather_key:
         raise SystemExit("OPENWEATHER_API_KEY is not set")
 
+    # Voice IDs: --voices flag > TTS_VOICES env var > default "mihai"
+    raw_voices = args.voices or os.environ.get("TTS_VOICES", "mihai")
+    voice_ids = [v.strip() for v in raw_voices.split(",") if v.strip()]
+
     from openai import OpenAI
     client = OpenAI(api_key=openai_key)
 
@@ -175,6 +222,7 @@ def main() -> None:
             archive_dir=archive_dir,
             openai_client=client,
             openweather_api_key=openweather_key,
+            voice_ids=voice_ids,
         )
     )
 
