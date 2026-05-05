@@ -17,6 +17,9 @@
   const seekFwd = document.getElementById("seek-fwd");
   const statusEl = document.getElementById("status");
   const speedBtn = document.getElementById("speed-btn");
+  const voiceBtn = document.getElementById("voice-btn");
+  const voicePanel = document.getElementById("voice-panel");
+  const voiceOptions = document.getElementById("voice-options");
   const headlinesList = document.getElementById("headlines-list");
   const headlinesContainer = document.getElementById("headlines-container");
 
@@ -31,6 +34,65 @@
     const s = speeds[speedIdx];
     audio.playbackRate = s;
     speedBtn.textContent = `${s}×`;
+  });
+
+  // --- voice picker ---
+  const VOICE_KEY = "stiricristi:voice";
+  let availableVoices = [];   // populated from manifest
+  let currentVoiceId = null;  // the voice currently loaded in <audio>
+
+  function savedVoiceId() {
+    return safeGet(VOICE_KEY);
+  }
+
+  function buildVoiceSrc(voice, date) {
+    return `${voice.url}?v=${encodeURIComponent(date)}`;
+  }
+
+  function renderVoiceOptions() {
+    const activeId = currentVoiceId;
+    voiceOptions.innerHTML = availableVoices
+      .map(v => {
+        const icon = v.gender === "female" ? "👩" : "👨";
+        const active = v.id === activeId ? " voice-option--active" : "";
+        return `<button class="voice-option${active}" data-voice-id="${v.id}" type="button" aria-pressed="${v.id === activeId}">
+          <span class="voice-option__icon">${icon}</span>
+          <span>${v.label}</span>
+        </button>`;
+      })
+      .join("");
+
+    voiceOptions.querySelectorAll(".voice-option").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const vid = btn.dataset.voiceId;
+        const voice = availableVoices.find(v => v.id === vid);
+        if (!voice || vid === currentVoiceId) return;
+
+        const wasPlaying = !audio.paused;
+        const pos = audio.currentTime;
+
+        currentVoiceId = vid;
+        safeSet(VOICE_KEY, vid);
+        audio.src = buildVoiceSrc(voice, currentBulletinDate);
+
+        audio.addEventListener("loadedmetadata", () => {
+          audio.currentTime = Math.min(pos, audio.duration || 0);
+          if (wasPlaying) audio.play().catch(() => {});
+        }, { once: true });
+
+        renderVoiceOptions();
+      });
+    });
+  }
+
+  voiceBtn.addEventListener("click", () => {
+    voicePanel.hidden = !voicePanel.hidden;
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!voicePanel.hidden && !voicePanel.contains(e.target) && e.target !== voiceBtn) {
+      voicePanel.hidden = true;
+    }
   });
 
   // --- position persistence ---
@@ -190,7 +252,24 @@
       dateEl.textContent = `Buletin din ${formatDateRo(manifest.date)}`;
       currentBulletinDate = manifest.date;
       pruneOldPositionKeys(currentBulletinDate);
-      audio.src = `latest.mp3?v=${encodeURIComponent(manifest.date)}`;
+
+      // Set up voice picker if manifest has multiple voices.
+      if (Array.isArray(manifest.voices) && manifest.voices.length > 1) {
+        availableVoices = manifest.voices;
+        const preferred = savedVoiceId();
+        const match = availableVoices.find(v => v.id === preferred);
+        const chosen = match || availableVoices[0];
+        currentVoiceId = chosen.id;
+        audio.src = buildVoiceSrc(chosen, manifest.date);
+        voiceBtn.hidden = false;
+        renderVoiceOptions();
+      } else {
+        // Single voice (or no manifest voices field) — use legacy latest.mp3.
+        audio.src = `latest.mp3?v=${encodeURIComponent(manifest.date)}`;
+        voiceBtn.hidden = true;
+        voicePanel.hidden = true;
+      }
+
       setupMediaSession("Știri Cristi", manifest.date);
       restorePositionOnce();
       applyWeatherTheme(manifest.weather_summary);
@@ -201,9 +280,10 @@
       }
     } catch (err) {
       statusEl.textContent = "Folosim buletinul salvat local.";
-      audio.src = "public/latest.mp3";
+      audio.src = "latest.mp3";
       dateEl.textContent = "Buletin din cache";
       headlinesContainer.hidden = true;
+      voiceBtn.hidden = true;
     }
   }
 
