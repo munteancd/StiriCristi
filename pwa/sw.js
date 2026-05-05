@@ -3,7 +3,7 @@
 // - AUDIO (latest.mp3): stale-while-revalidate keyed by manifest date.
 // - MANIFEST (latest.json): network-first with cache fallback.
 
-const SHELL_CACHE = "stiricristi-shell-v3";
+const SHELL_CACHE = "stiricristi-shell-v4";
 const AUDIO_CACHE = "stiricristi-audio-v1";
 
 const SHELL_ASSETS = [
@@ -89,8 +89,17 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (isShell(url)) {
+    // Network-first: always try to get the freshest HTML/CSS/JS;
+    // fall back to cache only when offline.
     event.respondWith(
-      caches.match(req).then((cached) => cached || fetch(req))
+      fetch(req)
+        .then((resp) => {
+          if (resp && resp.ok) {
+            caches.open(SHELL_CACHE).then((c) => c.put(req, resp.clone()));
+          }
+          return resp;
+        })
+        .catch(() => caches.match(req))
     );
     return;
   }
