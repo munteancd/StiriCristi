@@ -113,8 +113,6 @@ async def run_pipeline(
         return
 
     # 3. TTS → MP3 (one file per configured voice)
-    default_voice = voices[0]
-    out_mp3 = public_dir / "latest.mp3"
     duration = 0.0
     generated_voice_infos: list[dict] = []
 
@@ -129,18 +127,26 @@ async def run_pipeline(
                 "gender": voice.gender,
                 "url": f"latest-{voice.id}.mp3",
             })
-            if voice.id == default_voice.id:
-                shutil.copy2(voice_mp3, out_mp3)
+            # First voice that succeeds becomes the default latest.mp3
+            if not duration:
+                shutil.copy2(voice_mp3, public_dir / "latest.mp3")
                 duration = dur
         except (FileNotFoundError, RuntimeError, Exception) as exc:
             log.warning("TTS failed for voice %r: %s", voice.id, exc)
 
     if not generated_voice_infos:
-        log.warning("All TTS voices failed, saving text only")
+        log.error("All TTS voices failed (%s), saving text only", [v.id for v in voices])
         (public_dir / "latest.txt").write_text(text, encoding="utf-8")
         return
 
-    # 4. Archive a dated copy of the default voice
+    log.info(
+        "TTS complete: %d/%d voices ok: %s",
+        len(generated_voice_infos), len(voices),
+        [v["id"] for v in generated_voice_infos],
+    )
+    out_mp3 = public_dir / "latest.mp3"
+
+    # 4. Archive a dated copy
     dated = archive_dir / f"{now.strftime('%Y-%m-%d')}.mp3"
     shutil.copy2(out_mp3, dated)
 
