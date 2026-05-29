@@ -58,8 +58,8 @@ def _resolve_voices(voice_ids: list[str]) -> list[VoiceSpec]:
             continue
         voices.append(VOICE_BY_ID[vid])
     if not voices:
-        log.warning("no valid voices configured; falling back to 'mihai'")
-        voices = [VOICE_BY_ID["mihai"]]
+        log.warning("no valid voices configured; falling back to 'alina'")
+        voices = [VOICE_BY_ID["alina"]]
     return voices
 
 
@@ -78,7 +78,7 @@ async def run_pipeline(
     public_dir.mkdir(parents=True, exist_ok=True)
     archive_dir.mkdir(parents=True, exist_ok=True)
 
-    voices = _resolve_voices(voice_ids or ["mihai"])
+    voices = _resolve_voices(voice_ids or ["alina"])
 
     rss_cfg = {k: v for k, v in sources_cfg.items() if k != "weather"}
     weather_cfg = sources_cfg.get("weather", {})
@@ -198,8 +198,8 @@ def main() -> None:
     parser.add_argument(
         "--voices",
         default=None,
-        help="Comma-separated voice IDs to generate (e.g. mihai,alina). "
-             "Overrides TTS_VOICES env var. Default: mihai.",
+        help="Comma-separated voice IDs to generate (e.g. alina,emil). "
+             "Overrides TTS_VOICES env var. Default: alina.",
     )
     args = parser.parse_args()
 
@@ -214,8 +214,8 @@ def main() -> None:
     if not openweather_key:
         raise SystemExit("OPENWEATHER_API_KEY is not set")
 
-    # Voice IDs: --voices flag > TTS_VOICES env var > default "mihai"
-    raw_voices = args.voices or os.environ.get("TTS_VOICES", "mihai")
+    # Voice IDs: --voices flag > TTS_VOICES env var > default "alina"
+    raw_voices = args.voices or os.environ.get("TTS_VOICES", "alina")
     voice_ids = [v.strip() for v in raw_voices.split(",") if v.strip()]
 
     from openai import OpenAI
