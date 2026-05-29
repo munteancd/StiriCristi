@@ -171,7 +171,7 @@ async def run_pipeline(
         generated_at=datetime.now(tz=timezone.utc),
         headlines=headlines,
         weather_summary=weather_summary,
-        voices=generated_voice_infos if len(generated_voice_infos) > 1 else None,
+        voices=generated_voice_infos,
     )
     
     (public_dir / "latest.json").write_text(
