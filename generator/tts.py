@@ -95,6 +95,61 @@ def synthesize_edge(*, text: str, out_mp3: Path, config: EdgeTTSConfig) -> float
 
 
 # ---------------------------------------------------------------------------
+# Modal TTS (cloned voice via the xtts-voice app on Modal serverless GPU)
+# ---------------------------------------------------------------------------
+
+@dataclass
+class ModalTTSConfig:
+    # The deployed Modal app/class and the reference voice on its Volume.
+    app_name: str = "xtts-voice"
+    cls_name: str = "XTTS"
+    speaker: str = "cristi"     # reference sample voci/<speaker>.wav on the Volume
+    language: str = "ro"
+    temperature: float = 0.75   # expressiveness (chosen after A/B testing)
+    ffmpeg_binary: str = "ffmpeg"
+
+
+def synthesize_modal(*, text: str, out_mp3: Path, config: ModalTTSConfig) -> float:
+    """Generate an MP3 in the cloned voice via the Modal xtts-voice app.
+
+    Calls the deployed XTTS class remotely, which returns 24 kHz WAV bytes,
+    then re-encodes to MP3 at 96k to match the edge-tts output. Requires the
+    `modal` client and MODAL_TOKEN_ID / MODAL_TOKEN_SECRET in the environment.
+    """
+    import modal
+
+    out_mp3.parent.mkdir(parents=True, exist_ok=True)
+
+    xtts = modal.Cls.from_name(config.app_name, config.cls_name)()
+    log.info("modal-tts: synthesizing with speaker=%s temp=%s",
+             config.speaker, config.temperature)
+    wav_bytes: bytes = xtts.synthesize.remote(
+        text, config.language, config.speaker, config.temperature
+    )
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        raw_wav = Path(tmpdir) / "raw.wav"
+        raw_wav.write_bytes(wav_bytes)
+
+        ffmpeg_cmd = [
+            config.ffmpeg_binary,
+            "-y",
+            "-i", str(raw_wav),
+            "-codec:a", "libmp3lame",
+            "-b:a", "96k",
+            str(out_mp3),
+        ]
+        ff = subprocess.run(ffmpeg_cmd, capture_output=True, check=False)
+        if ff.returncode != 0:
+            raise RuntimeError(
+                f"ffmpeg re-encode failed (rc={ff.returncode}): "
+                f"{ff.stderr.decode(errors='replace')}"
+            )
+
+    return _ffprobe_duration_seconds(out_mp3, config.ffmpeg_binary)
+
+
+# ---------------------------------------------------------------------------
 # Unified voice registry
 # ---------------------------------------------------------------------------
 
@@ -104,8 +159,8 @@ class VoiceSpec:
     id: str          # short slug used in filenames, e.g. "alina", "emil"
     label: str       # display name shown in the UI
     gender: str      # "male" | "female"
-    backend: str     # "edge"
-    config: EdgeTTSConfig
+    backend: str     # "edge" | "modal"
+    config: "EdgeTTSConfig | ModalTTSConfig"
 
 
 # Built-in voices — subset is enabled per-run via sources.yaml or env config.
@@ -124,6 +179,16 @@ AVAILABLE_VOICES: list[VoiceSpec] = [
         backend="edge",
         config=EdgeTTSConfig(voice="ro-RO-EmilNeural"),
     ),
+    # Cristi's cloned voice (zero-shot XTTS-v2 RO fine-tune on Modal). Additive:
+    # if Modal is unavailable at generation time, the pipeline isolates the
+    # failure and still ships Alina + Emil, so the site never breaks.
+    VoiceSpec(
+        id="cristi",
+        label="Cristi",
+        gender="male",
+        backend="modal",
+        config=ModalTTSConfig(),
+    ),
 ]
 
 VOICE_BY_ID: dict[str, VoiceSpec] = {v.id: v for v in AVAILABLE_VOICES}
@@ -132,11 +197,14 @@ VOICE_BY_ID: dict[str, VoiceSpec] = {v.id: v for v in AVAILABLE_VOICES}
 def synthesize_voice(*, text: str, out_mp3: Path, voice: VoiceSpec) -> float:
     """Generate an MP3 for the given voice spec. Returns duration in seconds.
 
-    Edge TTS is a neural voice that handles foreign words natively, so it
-    receives the original text unchanged.
+    Neural voices handle foreign words natively, so they receive the original
+    text unchanged.
     """
     if voice.backend == "edge":
         assert isinstance(voice.config, EdgeTTSConfig)
         return synthesize_edge(text=text, out_mp3=out_mp3, config=voice.config)
+    elif voice.backend == "modal":
+        assert isinstance(voice.config, ModalTTSConfig)
+        return synthesize_modal(text=text, out_mp3=out_mp3, config=voice.config)
     else:
         raise ValueError(f"Unknown TTS backend: {voice.backend!r}")

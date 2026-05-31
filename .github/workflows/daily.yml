@@ -50,7 +50,12 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
-          TTS_VOICES: alina,emil
+          # Cloned voice "cristi" runs on Modal; if its secrets are missing or
+          # Modal is down, the generator isolates that voice's failure and still
+          # ships alina + emil, so the bulletin is never blocked.
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+          TTS_VOICES: alina,emil,cristi
         run: python -m generator.main --sources sources.yaml --public-dir public
 
       - name: Verify bulletin is present (allow fallback, fail if totally missing)

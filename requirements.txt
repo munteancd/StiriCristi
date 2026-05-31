@@ -4,3 +4,4 @@ openai==1.54.0
 PyYAML==6.0.2
 python-dotenv==1.0.1
 edge-tts>=6.1.10
+modal>=1.0
