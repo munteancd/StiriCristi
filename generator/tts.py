@@ -105,7 +105,7 @@ class ModalTTSConfig:
     cls_name: str = "XTTS"
     speaker: str = "cristi"     # reference sample voci/<speaker>.wav on the Volume
     language: str = "ro"
-    temperature: float = 0.70   # expressiveness (chosen after A/B testing on 45s ref)
+    temperature: float = 0.85   # validated profile (multi-clip ref + speed 1.35 in the app)
     ffmpeg_binary: str = "ffmpeg"
 
 
