@@ -150,6 +150,86 @@ def synthesize_modal(*, text: str, out_mp3: Path, config: ModalTTSConfig) -> flo
 
 
 # ---------------------------------------------------------------------------
+# Edge + RVC (Emil prosody converted to Cristi's timbre on Modal)
+# ---------------------------------------------------------------------------
+
+@dataclass
+class EdgeRVCConfig:
+    """Edge-TTS provides native Romanian prosody (rhythm, diction, number
+    reading); the RVC model on Modal swaps only the timbre, preserving timing
+    1:1. This replaced the XTTS clone, which sounded choppy."""
+    voice: str = "ro-RO-EmilNeural"
+    rate: str = "-4%"           # validated pace (~2.3 words/sec)
+    rvc_app: str = "rvc"        # deployed Modal app with the trained model
+    rvc_function: str = "convert"
+    transpose: int = 0          # 0 for male source → male target
+    ffmpeg_binary: str = "ffmpeg"
+
+
+def synthesize_edge_rvc(*, text: str, out_mp3: Path, config: EdgeRVCConfig) -> float:
+    """Generate Emil audio with edge-tts, then convert it to Cristi's timbre
+    via the Modal `rvc` app. Requires MODAL_TOKEN_ID / MODAL_TOKEN_SECRET.
+    """
+    import modal
+
+    out_mp3.parent.mkdir(parents=True, exist_ok=True)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        edge_mp3 = Path(tmpdir) / "edge.mp3"
+        edge_seconds = synthesize_edge(
+            text=text,
+            out_mp3=edge_mp3,
+            config=EdgeTTSConfig(
+                voice=config.voice,
+                rate=config.rate,
+                ffmpeg_binary=config.ffmpeg_binary,
+            ),
+        )
+
+        # The RVC model expects 40 kHz mono WAV input.
+        wav_40k = Path(tmpdir) / "edge_40k.wav"
+        ff = subprocess.run(
+            [config.ffmpeg_binary, "-y", "-i", str(edge_mp3),
+             "-ar", "40000", "-ac", "1", str(wav_40k)],
+            capture_output=True, check=False,
+        )
+        if ff.returncode != 0:
+            raise RuntimeError(
+                f"ffmpeg 40k resample failed (rc={ff.returncode}): "
+                f"{ff.stderr.decode(errors='replace')}"
+            )
+
+        convert = modal.Function.from_name(config.rvc_app, config.rvc_function)
+        log.info("edge-rvc: converting %.0fs of %s audio to Cristi's timbre",
+                 edge_seconds, config.voice)
+        converted: bytes = convert.remote(wav_40k.read_bytes(), config.transpose)
+
+        conv_wav = Path(tmpdir) / "converted.wav"
+        conv_wav.write_bytes(converted)
+
+        ff = subprocess.run(
+            [config.ffmpeg_binary, "-y", "-i", str(conv_wav),
+             "-codec:a", "libmp3lame", "-b:a", "96k", str(out_mp3)],
+            capture_output=True, check=False,
+        )
+        if ff.returncode != 0:
+            raise RuntimeError(
+                f"ffmpeg re-encode failed (rc={ff.returncode}): "
+                f"{ff.stderr.decode(errors='replace')}"
+            )
+
+    duration = _ffprobe_duration_seconds(out_mp3, config.ffmpeg_binary)
+    # RVC preserves timing 1:1 — a large drift means truncated/corrupt output,
+    # so fail the voice (the pipeline isolates it and still ships the others).
+    if edge_seconds and abs(duration - edge_seconds) > max(2.0, edge_seconds * 0.05):
+        raise RuntimeError(
+            f"edge-rvc duration drift: edge={edge_seconds:.1f}s "
+            f"converted={duration:.1f}s"
+        )
+    return duration
+
+
+# ---------------------------------------------------------------------------
 # Unified voice registry
 # ---------------------------------------------------------------------------
 
@@ -159,8 +239,8 @@ class VoiceSpec:
     id: str          # short slug used in filenames, e.g. "alina", "emil"
     label: str       # display name shown in the UI
     gender: str      # "male" | "female"
-    backend: str     # "edge" | "modal"
-    config: "EdgeTTSConfig | ModalTTSConfig"
+    backend: str     # "edge" | "modal" | "edge_rvc"
+    config: "EdgeTTSConfig | ModalTTSConfig | EdgeRVCConfig"
 
 
 # Built-in voices — subset is enabled per-run via sources.yaml or env config.
@@ -179,15 +259,15 @@ AVAILABLE_VOICES: list[VoiceSpec] = [
         backend="edge",
         config=EdgeTTSConfig(voice="ro-RO-EmilNeural"),
     ),
-    # Cristi's cloned voice (zero-shot XTTS-v2 RO fine-tune on Modal). Additive:
-    # if Modal is unavailable at generation time, the pipeline isolates the
-    # failure and still ships Alina + Emil, so the site never breaks.
+    # Cristi's voice: Emil prosody + RVC timbre conversion on Modal. If Modal
+    # is unavailable at generation time, the pipeline isolates the failure and
+    # still ships Alina + Emil, so the site never breaks.
     VoiceSpec(
         id="cristi",
         label="Cristi",
         gender="male",
-        backend="modal",
-        config=ModalTTSConfig(),
+        backend="edge_rvc",
+        config=EdgeRVCConfig(),
     ),
 ]
 
@@ -206,5 +286,8 @@ def synthesize_voice(*, text: str, out_mp3: Path, voice: VoiceSpec) -> float:
     elif voice.backend == "modal":
         assert isinstance(voice.config, ModalTTSConfig)
         return synthesize_modal(text=text, out_mp3=out_mp3, config=voice.config)
+    elif voice.backend == "edge_rvc":
+        assert isinstance(voice.config, EdgeRVCConfig)
+        return synthesize_edge_rvc(text=text, out_mp3=out_mp3, config=voice.config)
     else:
         raise ValueError(f"Unknown TTS backend: {voice.backend!r}")
